@@ -19,7 +19,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          {console.log(data)}
+          {}
         </p>
         <a
           className="App-link"
