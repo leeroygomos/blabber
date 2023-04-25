@@ -1,2 +1,2 @@
 # blabber
-A chat app using React and Electron
+A chat app using React and Electron.
