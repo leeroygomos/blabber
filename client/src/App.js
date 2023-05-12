@@ -1,35 +1,63 @@
-import logo from './logo.svg';
 import './App.css';
-import {useState, useEffect} from 'react';
-
-
+import { useState, useEffect } from 'react';
+import { socket } from './socket';
 
 function App() {
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
 
-  const [data, setData] = useState("");
+  useEffect(() => {
+    function onConnect() {
+      setIsConnected(true);
+    }
 
-  useEffect(()=>{
-    fetch("http://localhost:3001/testAPI")
-      .then(res => res.text())
-      .then(res => {setData({apiResponse:res})})
-    },[]);
+    function onDisconnect() {
+      setIsConnected(false);
+    }
+
+    function onShowMessage(msg) {
+      setMessages([...messages, msg]);
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.on('show message', (msg) => onShowMessage(msg));
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    };
+  }, [messages]);
+
+  const sendMessage = () => {
+    console.log(message);
+    socket.emit('message', message);
+  };
+
+  const handleInput = (event) => {
+    setMessage(event.target.value);
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          {}
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {isConnected ? <p>Server is connected</p> : <p>Server bad</p>}
+      <div>
+        <ul>
+          {messages.map((msg, index) => {
+            return <li key={index}>{msg}</li>;
+          })}
+        </ul>
+      </div>
+      <div>
+        <input
+          type="text"
+          onChange={(event) => {
+            handleInput(event);
+          }}
+        />
+        <button onClick={() => sendMessage()}>Send</button>
+      </div>
     </div>
   );
 }
