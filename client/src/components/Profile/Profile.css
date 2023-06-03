@@ -1,0 +1,30 @@
+.profile {
+    background-color: #242424;
+    padding: 2rem 1rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.avatar {
+    width: 5em;
+    height: auto;
+    border-radius: 50%;
+}
+
+.username {
+    font-weight: bolder;
+    font-size: x-large;
+}
+
+/* .status {
+    height: 2px;
+    width: 2px;
+    background-color: #3AA8AF;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    bottom: 3;
+} */

@@ -2,14 +2,10 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { socket } from './socket';
 import Chat from './components/Chat.js';
-import Friends from './components/Friends.js';
-import Groups from './components/Groups.js';
 import Input from './components/Input.js';
-import Layout from './components/Layout.js';
 import Message from './components/Message.js';
 import Messages from './components/Messages.js';
-import Profile from './components/Profile.js';
-import Sidebar from './components/Sidebar.js';
+import Sidebar from './components/Sidebar/Sidebar';
 import Tabs from './components/Tabs.js';
 
 function App() {
@@ -70,20 +66,16 @@ function App() {
     //   </div>
     // </div>
 
-    <Layout>
-        <Sidebar>
-          <Profile></Profile>
-          <Friends></Friends>
-          <Groups></Groups>
-        </Sidebar>
+    <div className="layout">
+      <Sidebar></Sidebar>
+      <Chat>
         <Tabs></Tabs>
-        <Chat>
-          <Messages>
-            <Message></Message>
-          </Messages>
-          <Input></Input>
-        </Chat>
-    </Layout>
+        <Messages>
+          <Message></Message>
+        </Messages>
+        <Input></Input>
+      </Chat>
+    </div>
   );
 }
 
