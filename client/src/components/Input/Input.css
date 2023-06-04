@@ -1,0 +1,26 @@
+.input {
+    display: flex;
+    height: 20%;
+    width: 100%;
+    align-items: center;
+}
+
+.textbox {
+    width: 80%;
+    height: 30%;
+    font-size: 2rem;
+    padding-left: 1%;
+    margin-left: 1%;
+}
+
+.emoji {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+.send {
+    width: 10%;
+    font-size: 2rem;
+}

@@ -1,0 +1,38 @@
+.tab {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    padding: 0 0.1%
+}
+
+.tab-header-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 5%;
+    overflow: hidden;
+    margin-top:0.3%;
+}
+
+.tab-header {
+    display: flex;
+    width: 10%;
+    font-size: 0.7rem;
+    align-items: center;
+    justify-content: center;
+    margin-top:0.3%;
+    margin-right:0.2%;
+    border-radius: 20% 20% 0 0;
+}
+
+.tab-header:hover{
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.tab-body {
+    height: 94%;
+    width: 99.8%;
+    border-radius: 0 3% 3% 3%;
+}

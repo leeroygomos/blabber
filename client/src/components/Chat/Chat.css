@@ -1,0 +1,16 @@
+.chat {
+    background-color: black;
+    width: 80%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+    height: 100%;
+}

@@ -1,17 +1,14 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { socket } from './socket';
-import Chat from './components/Chat.js';
-import Input from './components/Input.js';
-import Message from './components/Message.js';
-import Messages from './components/Messages.js';
+import Chat from './components/Chat/Chat';
 import Sidebar from './components/Sidebar/Sidebar';
-import Tabs from './components/Tabs.js';
 
 function App() {
   // const [isConnected, setIsConnected] = useState(socket.connected);
   // const [message, setMessage] = useState('');
   // const [messages, setMessages] = useState([]);
+  const [activeChats, setActiveChats] = useState(['leeroycool','stickypasta','pip','froggers','billy'])
 
   // useEffect(() => {
   //   function onConnect() {
@@ -67,14 +64,8 @@ function App() {
     // </div>
 
     <div className="layout">
-      <Sidebar></Sidebar>
-      <Chat>
-        <Tabs></Tabs>
-        <Messages>
-          <Message></Message>
-        </Messages>
-        <Input></Input>
-      </Chat>
+      <Sidebar/>
+      <Chat activeChats={activeChats}/>
     </div>
   );
 }
