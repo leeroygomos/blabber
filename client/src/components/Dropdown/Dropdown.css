@@ -1,0 +1,13 @@
+.dropdown {
+    width: 100%;
+    height: auto;
+}
+
+.toggle-btn {
+    width: 100%;
+    border: none;
+    background-color: #2F2F2F;
+    color: white;
+    padding: 0;
+    cursor: pointer;
+}
