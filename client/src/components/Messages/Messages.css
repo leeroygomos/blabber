@@ -7,6 +7,7 @@
     height: 97%;
     border-radius: 3%;
     color: white;
+    overflow-x: hidden;
 }
 
 .messages {
@@ -19,7 +20,7 @@
 .message-item {
     display: flex;
     flex-direction: column;
-    height: 10%;
+    min-height: 10%;
     margin: 0.1%
 }
 
@@ -32,6 +33,12 @@
     margin: 1px 1rem;
 }
 
+.message-item-header {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+
 .message-item .user {
     font-size: large;
     font-weight: bold;
@@ -41,4 +48,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

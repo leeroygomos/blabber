@@ -8,7 +8,7 @@ export default function Chat({activeChats}){
             {
                 activeChats.length > 0 
                 ? 
-                <Tabs tabNames={activeChats}/>
+                <Tabs activeChats={activeChats}/>
                 : 
                 <div className='placeholder'>
                     <p>You have no friends</p>

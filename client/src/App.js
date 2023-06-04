@@ -8,7 +8,30 @@ function App() {
   // const [isConnected, setIsConnected] = useState(socket.connected);
   // const [message, setMessage] = useState('');
   // const [messages, setMessages] = useState([]);
-  const [activeChats, setActiveChats] = useState(['leeroycool','stickypasta','pip','froggers','billy'])
+  const [activeChats, setActiveChats] = useState(
+    [
+      {
+      user: 'leeroycool',
+      messages: [{username:'leeroycool', message:'hi pip', timestamp: '2023-05-09 4:20 PM'}, {username:'pip', message:'wassap', timestamp: '2023-05-09 4:20 PM'}]
+      },
+      {
+        user: 'stickypasta',
+        messages: [{username:'pip', message: 'ayo', timestamp: '2023-05-09 4:20 PM'}, {username:'stickypasta', message: 'u r so cute pip!', timestamp: '2023-05-09 4:20 PM'}, {username:'pip', message: 'ya i know :))', timestamp: '2023-05-09 4:20 PM'}]
+      },
+      {
+        user: 'pip',
+        messages: [{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'},{username:'pip', message: 'hello to myself', timestamp: '2023-05-09 4:20 PM'}]
+      },
+      {
+        user: 'froggers',
+        messages: [{username:'pip', message: 'sup dawg', timestamp: '2023-05-09 4:20 PM'}, {username:'froggers', message: 'im soo THICC', timestamp: '2023-05-09 4:20 PM'}]
+      },
+      {
+        user: 'mario',
+        messages: [{username:'pip', message: 'who tf is this?', timestamp: '2023-05-09 4:20 PM'}, {username:'mario', message: 'its a me MARIO!', timestamp: '2023-05-09 4:20 PM'}]
+      }
+    ]
+    )
 
   // useEffect(() => {
   //   function onConnect() {

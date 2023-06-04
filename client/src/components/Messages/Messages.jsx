@@ -8,7 +8,7 @@ export default function Messages({messages}){
             <div className='messages'>
                 {messages.length > 0 
                     ? messages.map((message) => {
-                            return <MessageItem username={message.username} message={message.msg}/>
+                            return <MessageItem username={message.username} message={message.message} timestamp={message.timestamp}/>
                         }) 
                     : <p className="placeholder">No messages</p>
                 }
@@ -18,10 +18,13 @@ export default function Messages({messages}){
     );
 }
 
-function MessageItem({username, message}){
+function MessageItem({username, message, timestamp}){
     return(
         <div className='message-item'>
-            <p className='user'>{username}</p>
+            <div className='message-item-header'>
+                <p className='user'>{username}</p>
+                <p className='timestamp'>{timestamp}</p>
+            </div>
             <p classname='message'>{message}</p>
         </div>
     );
