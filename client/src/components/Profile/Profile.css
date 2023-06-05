@@ -1,11 +1,11 @@
 .profile {
     background-color: #242424;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 2rem 3rem;
     color: white;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
 }
 
 .avatar {
@@ -17,6 +17,7 @@
 .username {
     font-weight: bolder;
     font-size: x-large;
+    margin-bottom: 0.5em;
 }
 
 /* .status {

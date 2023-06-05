@@ -1,6 +1,7 @@
 .dropdown {
     width: 100%;
     height: auto;
+    margin-bottom: 0.2em;
 }
 
 .toggle-btn {
@@ -8,6 +9,61 @@
     border: none;
     background-color: #2F2F2F;
     color: white;
+    padding: 1em 2em;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.add-btn {
+    border: none;
+    background-color: #2F2F2F;
     padding: 0;
     cursor: pointer;
+}
+
+.title {
+    margin-left: 0.5em;
+    font-size: medium;
+    font-weight: 500;
+}
+
+.dropdown-list ul {
+    list-style: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    height: 100%;
+    margin: 0.5em 0 0 0;
+}
+
+li {
+    background-color: #505050;
+    border-radius: 20px;
+    width: 90%;
+    margin-bottom: 0.5em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+img {
+    width: 3em;
+    height: auto;
+    border-radius: 50%;
+}
+
+li .username {
+    font-weight: bolder;
+    font-size: large;
+    margin-bottom: 0.2em;
 }
