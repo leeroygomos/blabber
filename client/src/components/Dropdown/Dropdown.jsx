@@ -11,6 +11,16 @@ export default function Dropdown({title, list}){
         setIsOpen(!isOpen);
     }
 
+    const openModal = () => {
+        // open either 1. modal to add a friend or 2. modal to add a group
+        console.log("open add modal");
+    }
+
+    const openChat = () => {
+        // open chat with selected username/group
+        console.log("open chat");
+    }
+
     return(
         <div className="dropdown">
             <button className="toggle-btn" onClick={ toggleOpen }>
@@ -21,12 +31,12 @@ export default function Dropdown({title, list}){
                         <span><FontAwesomeIcon icon={faCaretRight} style={{color: "#ffffff",}} /></span>
                         <span className="title">{ title }</span>
                     </div>}
-                <span><button className="add-btn"><FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}} /></button></span>
+                <span><button className="add-btn" onClick={openModal}><FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}} /></button></span>
             </button>
             {isOpen ? <div className="dropdown-list">
                 <ul>
                     {list.map((item, index) => {
-                        return <li key={index}>
+                        return <li key={index} onClick={openChat}>
                                     <img src={item.img} alt="avatar" />
                                     <div className="info">
                                         <div className="username">{item.name}</div>
