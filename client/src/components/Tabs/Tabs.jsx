@@ -2,7 +2,7 @@ import { useState } from "react";
 import './Tabs.css';
 import Messages from '../Messages/Messages';
 
-const tabColors = ['aqua', 'pink', 'orange', 'lime','lavender'];
+const tabColors = ['#8CD6FF', '#CE7F7F', '#F8F4D0', '#9CA6FF','#A7FF9F'];
 
 export default function Tabs({activeChats}){
     const [currentTab, setCurrentTab] = useState(0);
@@ -27,7 +27,7 @@ function TabHeader({activeChats, setCurrentTab, setMessages}){
                 let tabColor = tabColors[index];
                 return (
                     <div className='tab-header' style={{backgroundColor:tabColor}} onClick={() => {setCurrentTab(index); setMessages(activeChats[index].messages)}}>
-                        <h1>{chat.user}</h1>
+                        {chat.user}
                     </div>
                     )
                 }

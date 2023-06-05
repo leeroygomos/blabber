@@ -1,7 +1,7 @@
 .messages-container {
     display: flex;
     flex-direction: column;
-    background-color: rgb(45, 43, 43);
+    background-color: #333333;
     margin: 1%;
     width: 98%;
     height: 97%;
