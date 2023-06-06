@@ -9,6 +9,8 @@ const http = require('http');
 const server = http.createServer(app);
 mongoose.connect(process.env.MONGODB_URL);
 
+const Users = require('./models/Users');
+
 // uncomment this to test db connection
 
 // const studentSchema = new mongoose.Schema({
@@ -30,6 +32,16 @@ mongoose.connect(process.env.MONGODB_URL);
 //   () => console.log('One entry added'),
 //   (err) => console.log(err)
 // );
+
+const newUser = Users({
+  id:1,
+  username: "pip"
+});
+
+newUser.save().then(
+  () => console.log('One entry added'),
+  (err) => console.log(err)
+);
 
 // set app ports and policies
 app.use(express.json());
