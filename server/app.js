@@ -8,6 +8,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 mongoose.connect(process.env.MONGODB_URL);
+app.use(express.json());
 
 const Users = require('./models/Users');
 
@@ -42,9 +43,10 @@ newUser.save().then(
   () => console.log('One entry added'),
   (err) => console.log(err)
 );
+// routes
+require('./routes/UsersRoutes')(app);
 
 // set app ports and policies
-app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 

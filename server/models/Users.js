@@ -5,8 +5,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UsersSchema = new Schema({
-  id: Number,
-  username: String,
+  username: {
+    type: String,
+    unique: true
+  },
+  password: String,
+  name: String,
+  chatIds: [String]
 });
 
 // Compile model from schema
