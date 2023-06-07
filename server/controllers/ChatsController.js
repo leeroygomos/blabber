@@ -3,7 +3,7 @@ const Chats = require('../models/Chats');
 module.exports = {
   getChat: async (req, res) => {
     // Get chat with specified Id
-    const chat = await Chats.findById(req.params.id).exec();
+    const chat = await Chats.findById(req.params.chatId).exec();
 
     // Return chat info if the chat exists
     chat

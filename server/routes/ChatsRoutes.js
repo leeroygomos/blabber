@@ -1,4 +1,4 @@
-controller = require('../controllers/ChatsController');
+chatsController = require('../controllers/ChatsController');
 
 module.exports = function (app) {
   app.get('/chats/:userId/getFriends', function (req, res) {
@@ -9,7 +9,7 @@ module.exports = function (app) {
     // TODO: connect to controller
   });
 
-  app.get('/chats/:chatId', controller.getChat);
+  app.get('/chats/:chatId', chatsController.getChat);
 
   app.post('/chats/createChat', function (req, res) {
     // TODO: connect to controller
