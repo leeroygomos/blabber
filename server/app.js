@@ -34,8 +34,8 @@ const Users = require('./models/Users');
 // );
 
 const newUser = Users({
-  id:1,
-  username: "pip"
+  id: 1,
+  username: 'pip',
 });
 
 newUser.save().then(
