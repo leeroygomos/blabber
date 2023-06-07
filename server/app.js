@@ -11,6 +11,7 @@ mongoose.connect(process.env.MONGODB_URL);
 app.use(express.json());
 
 const Users = require('./models/Users');
+const Chats = require('./models/Chats');
 
 const user1 = Users({
   id: 1,
@@ -32,9 +33,19 @@ user2.save().then(
   (err) => console.log(err)
 );
 
+const chat1 = Chats({
+  chatName: 'Cool Chat Between LEEROYCOOL and PIP',
+  users: [user1._id, user2._id],
+});
+
+chat1.save().then(
+  () => console.log('One entry added'),
+  (err) => console.log(err)
+);
+
 // routes
 require('./routes/UsersRoutes')(app);
-require('./routes/ChatssRoutes')(app);
+require('./routes/ChatsRoutes')(app);
 
 // set app ports and policies
 app.use(cors());
