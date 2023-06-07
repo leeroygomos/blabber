@@ -12,39 +12,29 @@ app.use(express.json());
 
 const Users = require('./models/Users');
 
-// uncomment this to test db connection
-
-// const studentSchema = new mongoose.Schema({
-//   roll_no: Number,
-//   name: String,
-//   year: Number,
-//   subjects: [String],
-// });
-
-// const Student = mongoose.model('Student', studentSchema);
-
-// const stud = new Student({
-//   roll_no: 1001,
-//   name: 'Madison Hyde',
-//   year: 3,
-//   subjects: ['DBMS', 'OS', 'Graph Theory', 'Internet Programming'],
-// });
-// stud.save().then(
-//   () => console.log('One entry added'),
-//   (err) => console.log(err)
-// );
-
-const newUser = Users({
+const user1 = Users({
   id: 1,
   username: 'pip',
 });
 
-newUser.save().then(
+user1.save().then(
   () => console.log('One entry added'),
   (err) => console.log(err)
 );
+
+const user2 = Users({
+  id: 2,
+  username: 'leeroycool',
+});
+
+user2.save().then(
+  () => console.log('One entry added'),
+  (err) => console.log(err)
+);
+
 // routes
 require('./routes/UsersRoutes')(app);
+require('./routes/ChatssRoutes')(app);
 
 // set app ports and policies
 app.use(cors());
