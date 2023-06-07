@@ -1,9 +1,13 @@
 controller = require('../controllers/UsersController');
 
+// const express = require('express');
+
 module.exports = function(app){
+    // app.use(express.json());
 
     app.post('/users/login', function(req, res){
-        // do stuff
+        data = req.body;
+        controller.login(data.username, data.password, req, res);
     });
 
     app.get('/users/getUser', function(req, res){
@@ -12,9 +16,7 @@ module.exports = function(app){
 
     app.post('/users/signup', function(req, res){
         data = req.body;
-        console.log(data);
-        controller.signup(data);
-
+        controller.signup(data,res);
     });
 
     app.post('/users/logout', function(req, res){

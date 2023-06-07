@@ -7,17 +7,20 @@ const port = process.env.PORT || '3001';
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
+const session = require('express-session');
 mongoose.connect(process.env.MONGODB_URL);
 app.use(express.json());
-
-// routes
-require('./routes/UsersRoutes')(app);
+app.use(express.urlencoded({ extended: true }))
 
 // set app ports and policies
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: 'secret'}));
 
 app.set('port', port);
+
+// routes
+require('./routes/UsersRoutes')(app);
 
 app.get('/', (req, res) => {
   res.send('bruh');
