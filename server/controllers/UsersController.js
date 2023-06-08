@@ -52,8 +52,9 @@ function signup(data, res){
     );
 }
 
-function logout(){
-
+function logout(req,res){
+    req.session.destroy();
+    res.redirect('/');
 }
 
 module.exports = {login, getUser, signup, logout}

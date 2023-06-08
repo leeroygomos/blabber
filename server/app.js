@@ -71,10 +71,20 @@ require('./routes/ChatsRoutes')(app);
 
 app.get('/', (req, res) => {
   if ('username' in req.session){
-    res.send('sup ' + req.session.username);
+    res.send('sup ' + req.session.username + '<br/>' + 
+      `<form action="/users/logout" method="post">
+          <input type="submit" value="logout" />
+      </form>`);
   }
   else {
-    res.sendFile(path.join(__dirname + '/views/login.html'));
+    res.send(`
+        <h1>LOGIN</h1>
+        <form action="/users/login" method="post">
+            <input type="text" id='username' name="username" placeholder="username"/>
+            <input type="text" id='password' name="password" placeholder="password"/>
+            <input type="submit" value="Login" />
+        </form>
+    `)
   }
 });
 

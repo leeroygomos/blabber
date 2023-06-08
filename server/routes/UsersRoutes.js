@@ -16,6 +16,6 @@ module.exports = function(app){
     });
 
     app.post('/users/logout', function(req, res){
-        //do stuff
+        usersController.logout(req,res);
     });
 }
