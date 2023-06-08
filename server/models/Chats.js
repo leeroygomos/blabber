@@ -11,6 +11,10 @@ const ChatsSchema = new Schema({
     maxLength: 255,
   },
   users: [String],
+  description: {
+    type: String,
+    maxLength: 150,
+  },
 });
 
 // Compile model from schema
