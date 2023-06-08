@@ -11,7 +11,13 @@ const UsersSchema = new Schema({
   },
   password: String,
   name: String,
-  chatIds: [String]
+  chatIds: [String],
+  status: {
+    type: String,
+    default: 'offline',
+    enum: ['online', 'offline']
+  },
+  bio: String
 });
 
 // Compile model from schema

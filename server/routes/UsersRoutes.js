@@ -18,4 +18,8 @@ module.exports = function(app){
     app.post('/users/logout', function(req, res){
         usersController.logout(req,res);
     });
+
+    app.post('/users/addFriend/:username', function(req, res){
+        usersController.addFriend(req,res);
+    })
 }
