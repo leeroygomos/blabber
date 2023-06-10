@@ -7,9 +7,9 @@ async function getUserByUsername(username){
     return user;
 }
 
-async function getUserById(id){
-    let user = await Users.findById(id).exec();
-    return user;
+async function getUsersByIds(ids){
+    let users = await Users.find({_id: {$in: ids}}).exec();
+    return users;
 }
 
 async function login(username, password, req, res){
@@ -123,4 +123,4 @@ async function addFriend(req, res){
     }
 }
 
-module.exports = {getUserByUsername, getUserById, login, signup, logout, addFriend}
+module.exports = {getUserByUsername, getUsersByIds, login, signup, logout, addFriend}
