@@ -1,13 +1,9 @@
 chatsController = require('../controllers/ChatsController');
 
 module.exports = function (app) {
-  app.get('/chats/getChats', function (req, res) {
-    // TODO: connect to controller
-  });
+  app.get('/chats/getFriends', chatsController.getFriends);
 
-  app.get('/chats/:chatId', chatsController.getChat);
+  app.get('/chats/getGroups', chatsController.getGroups);
 
-  app.post('/chats/createChat', function (req, res) {
-    // TODO: connect to controller
-  });
+  app.post('/chats/createChat', chatsController.createChat);
 };
