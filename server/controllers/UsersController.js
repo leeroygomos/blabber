@@ -2,6 +2,16 @@ const Users = require('../models/Users');
 const Chats = require('../models/Chats');
 const auth = require('../services/AuthenticationService');
 
+async function getUserByUsername(username){
+    let user = await Users.findOne({username: username}).exec();
+    return user;
+}
+
+async function getUserById(id){
+    let user = await Users.findById(id).exec();
+    return user;
+}
+
 async function login(username, password, req, res){
     // check if a user is already logged in
     if (req.session?.username){
@@ -10,7 +20,7 @@ async function login(username, password, req, res){
     }
 
     // check if user with the given username exists
-    let user = await Users.findOne({username: username}).exec();
+    let user = await getUserByUsername(username);
     if (user) {
         // check if password is correct
         if (await auth.validateUser(password, user.password)){
@@ -36,13 +46,9 @@ async function login(username, password, req, res){
     }
 }
 
-function getUser(username){
-
-}
-
 async function signup(data, res){
     // check if a user with the username already exists
-    let user = await Users.findOne({username: data.username}).exec();
+    let user = await getUserByUsername(data.username);
     if (user){
         res.send("Username already taken!");
         return;
@@ -70,7 +76,7 @@ async function signup(data, res){
 
 async function logout(req,res){
     // set status to offline
-    let user = await Users.findOne({username: req.session.username}).exec();
+    let user = await getUserByUsername(req.session.username);
     user.status = 'offline';
     await user.save();
 
@@ -81,7 +87,7 @@ async function logout(req,res){
 
 async function addFriend(req, res){
     // check if a user with the given username exists
-    let friend = await Users.findOne({username: req.params.username}).exec();
+    let friend = await getUserByUsername(req.params.username);
     if (!friend){
         res.send("User not found!");
         return;
@@ -93,7 +99,7 @@ async function addFriend(req, res){
     }
 
     // get user and friend's chatIds
-    let user = await Users.findOne({username: req.body.username}).exec();
+    let user = await getUserByUsername(req.body.username);
     let userChatList = user.chatIds;
     let friendChatList = friend.chatIds;
 
@@ -117,4 +123,4 @@ async function addFriend(req, res){
     }
 }
 
-module.exports = {login, getUser, signup, logout, addFriend}
+module.exports = {getUserByUsername, getUserById, login, signup, logout, addFriend}
