@@ -6,7 +6,7 @@ module.exports = {
   getFriends: async (req, res) => {
     // get all group chat IDs from current session
     const chatIds = req.session.chatIds;
-    const curUserId = req.session.id;
+    const curUserId = req.session.userid;
 
     // find all DMs in current session
     let directMessages = await Chats.find({ isGroupChat: false })
