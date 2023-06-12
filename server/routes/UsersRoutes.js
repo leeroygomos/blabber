@@ -22,4 +22,9 @@ module.exports = function(app){
     app.post('/users/addFriend/:username', function(req, res){
         usersController.addFriend(req,res);
     })
+
+    app.get('/users/getLoggedInUser', function(req, res){
+        usersController.getLoggedInUser(req,res);
+    })
+
 }

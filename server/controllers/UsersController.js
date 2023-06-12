@@ -53,14 +53,14 @@ async function login(username, password, req, res){
             await user.save();
 
             //redirect to root page
-            res.redirect('/')
+            res.status(200).redirect('/')
         }
         else{
-            res.send("Incorrect password or username!")
+            res.status(401).send("Incorrect username or password!")
         }
     }
     else {
-        res.send("Incorrect username or password!");
+        res.status(401).send("Incorrect username or password!");
     }
 }
 

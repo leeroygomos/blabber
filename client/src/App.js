@@ -3,11 +3,30 @@ import { useState, useEffect } from 'react';
 import { socket } from './socket';
 import Chat from './components/Chat/Chat';
 import Sidebar from './components/Sidebar/Sidebar';
+import { useNavigate } from "react-router-dom";
 
 function App() {
   // const [isConnected, setIsConnected] = useState(socket.connected);
   // const [message, setMessage] = useState('');
   // const [messages, setMessages] = useState([]);
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('http://localhost:3001/users/getLoggedInUser', {credentials : "include"})
+    .then(res => res.json())
+    .then(data => {
+      if (data?.username){
+        setUser(data);
+        setLoading(false);
+      }
+      else {
+        navigate('/login');
+      }
+    }); 
+  }, []);
+
   const [activeChats, setActiveChats] = useState(
     [
       {
@@ -85,10 +104,13 @@ function App() {
     //     <button onClick={() => sendMessage()}>Send</button>
     //   </div>
     // </div>
-
     <div className="layout">
-      <Sidebar/>
-      <Chat activeChats={activeChats}/>
+      { loading ? <h1>Loading...</h1> : //TODO: Add a real loading screen
+      <>
+        <Sidebar/>
+        <Chat activeChats={activeChats}/>
+      </>
+      }
     </div>
   );
 }

@@ -57,7 +57,7 @@
     background-color: #3AA8AF;
     color: white;
     border-style: none;
-    margin: 7%;
+    margin: 7% 7% 0% 7%;
     align-self: center;
     border-radius: 25px;
 }
@@ -84,4 +84,13 @@
 .login-footer a:hover{
     cursor: pointer;
     color: #3AA8AF;
+}
+
+.error {
+    color: red;
+}
+
+.hidden-error {
+    color: transparent;
+    user-select: none;
 }
