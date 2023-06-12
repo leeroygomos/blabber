@@ -7,6 +7,11 @@ async function getUserByUsername(username){
     return user;
 }
 
+async function getUsersByUsernames(usernames){
+    let users = await Users.find({username: {$in: usernames}}).exec();
+    return users;
+}
+
 async function getUsersByIds(ids){
     let users = await Users.find({_id: {$in: ids}}).exec();
     return users;
@@ -127,4 +132,4 @@ function getLoggedInUser(req, res){
     res.json({id: req.session?.userid, username: req.session?.username});
 }
 
-module.exports = {getUserByUsername, getUsersByIds, login, signup, logout, addFriend, getLoggedInUser};
+module.exports = {getUserByUsername, getUsersByUsernames, getUsersByIds, login, signup, logout, addFriend, getLoggedInUser};
