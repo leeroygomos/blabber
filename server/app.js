@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGODB_URL);
 
 // set up request parsers
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
 // const Users = require('./models/Users');
 // const Chats = require('./models/Chats');
@@ -57,12 +57,14 @@ app.set('port', port);
 
 //initialize session and cookies
 const oneDay = 1000 * 60 * 60 * 24;
-app.use(session({
-    secret: 'blabber', 
-    resave: false, 
-    cookie: {maxAge: oneDay},
-    saveUninitialized: true
-  }));
+app.use(
+  session({
+    secret: 'blabber',
+    resave: false,
+    cookie: { maxAge: oneDay },
+    saveUninitialized: true,
+  })
+);
 app.use(cookieParser());
 
 // routes
@@ -70,13 +72,16 @@ require('./routes/UsersRoutes')(app);
 require('./routes/ChatsRoutes')(app);
 
 app.get('/', (req, res) => {
-  if ('username' in req.session){
-    res.send('sup ' + req.session.username + '<br/>' + 
-      `<form action="/users/logout" method="post">
+  if ('username' in req.session) {
+    res.send(
+      'sup ' +
+        req.session.username +
+        '<br/>' +
+        `<form action="/users/logout" method="post">
           <input type="submit" value="logout" />
-      </form>`);
-  }
-  else {
+      </form>`
+    );
+  } else {
     res.send(`
         <h1>LOGIN</h1>
         <form action="/users/login" method="post">
@@ -84,7 +89,7 @@ app.get('/', (req, res) => {
             <input type="text" id='password' name="password" placeholder="password"/>
             <input type="submit" value="Login" />
         </form>
-    `)
+    `);
   }
 });
 
