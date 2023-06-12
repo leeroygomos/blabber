@@ -54,11 +54,43 @@ module.exports = {
 
   // create a group chat
   createGroupChat: async (req, res) => {
+    // get all users to be added
+    let members = await usersController.getUsersByUsernames(req.body.users);
+
+    // get all IDs to be added
+    let memberIds = members.map((user) => {
+      return user._id;
+    });
+
+    // check if all users entered exist
+    // TODO: improve this error check
+    if (memberIds.length !== req.body.users.length) {
+      res.status(404).send('At least 1 user you entered does not exist');
+    }
+
+    // add current user ID to the list of IDs to be added
+    memberIds.push(req.session.userid);
+
     // create a new group chat object
     const newGroupChat = Chats({
       chatName: req.body.chatName,
-      users: req.body.users,
+      users: memberIds,
       isGroupChat: false,
     });
+
+    // save the new group chat to the database
+    newGroupChat.save().then(
+      () => {
+        // add new chatId to each user
+
+        // redirect to root on success
+        res.status(200).redirect('/');
+      },
+      (err) => {
+        // send error if save fails
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+      }
+    );
   },
 };
