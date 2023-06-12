@@ -52,6 +52,13 @@ module.exports = {
     groups ? res.json(groups) : res.json([]);
   },
 
-  // create a chat
-  createChat: async (req, res) => {},
+  // create a group chat
+  createGroupChat: async (req, res) => {
+    // create a new group chat object
+    const newGroupChat = Chats({
+      chatName: req.body.chatName,
+      users: req.body.users,
+      isGroupChat: false,
+    });
+  },
 };

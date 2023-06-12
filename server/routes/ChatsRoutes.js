@@ -5,5 +5,7 @@ module.exports = function (app) {
 
   app.get('/chats/getGroups', chatsController.getGroups);
 
-  app.post('/chats/createChat', chatsController.createChat);
+  app.post('/chats/createGroupChat', chatsController.createGroupChat);
+
+  app.post('/chats/createDirectMessage', chatsController.createDirectMessage);
 };
