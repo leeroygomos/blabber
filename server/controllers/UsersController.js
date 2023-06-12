@@ -17,6 +17,19 @@ async function getUsersByIds(ids){
     return users;
 }
 
+async function updateChatLists(chatId, userIds){
+    let users = await getUsersByIds(userIds);
+    for (let i = 0; i < users.length; i++){
+        users[i].chatIds.push(chatId);
+        try{
+            await users[i].save();
+        }
+        catch(err){
+            return 'Error updating chat list for user '+ users[i].username;
+        }
+}
+}
+
 async function login(username, password, req, res){
     // check if a user is already logged in
     if (req.session?.username){
@@ -132,4 +145,14 @@ function getLoggedInUser(req, res){
     res.json({id: req.session?.userid, username: req.session?.username});
 }
 
-module.exports = {getUserByUsername, getUsersByUsernames, getUsersByIds, login, signup, logout, addFriend, getLoggedInUser};
+module.exports = {
+    getUserByUsername, 
+    getUsersByUsernames, 
+    getUsersByIds, 
+    login, 
+    signup, 
+    logout, 
+    addFriend, 
+    getLoggedInUser, 
+    updateChatLists
+};
