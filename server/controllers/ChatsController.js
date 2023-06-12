@@ -1,5 +1,5 @@
 const Chats = require('../models/Chats');
-const Users = require('../models/Users');
+const usersController = require('./UsersController');
 
 module.exports = {
   // get all friends (DMs) from current session
@@ -13,6 +13,28 @@ module.exports = {
       .where('_id')
       .in(chatIds)
       .exec();
+
+    // find all friend IDs of currently logged-in user
+    let recipientIds = directMessages.map((message) => {
+      return message.users[0] === curUserId
+        ? message.users[1]
+        : message.users[0];
+    });
+
+    // find all recipients
+    let recipients = await usersController.getUsersByIds(recipientIds);
+
+    // add recipient username to data
+    let modifiedDirectMessages = directMessages.map((message) => {
+      let messageObj = message.toObject();
+      messageObj.username = recipients.find((recipient) =>
+        message.users.includes(recipient._id)
+      ).username;
+      return messageObj;
+    });
+
+    // return query
+    modifiedDirectMessages ? res.json(modifiedDirectMessages) : res.json([]);
   },
 
   // get all group chats from current session
