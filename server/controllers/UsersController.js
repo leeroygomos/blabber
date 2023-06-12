@@ -25,7 +25,7 @@ async function login(username, password, req, res){
         // check if password is correct
         if (await auth.validateUser(password, user.password)){
             // set session variables
-            req.session.id = user._id;
+            req.session.userid = user._id;
             req.session.username = user.username;
             req.session.name = user.name;
             req.session.chatIds = user.chatIds;
@@ -123,4 +123,8 @@ async function addFriend(req, res){
     }
 }
 
-module.exports = {getUserByUsername, getUsersByIds, login, signup, logout, addFriend}
+function getLoggedInUser(req, res){
+    res.json({id: req.session?.userid, username: req.session?.username});
+}
+
+module.exports = {getUserByUsername, getUsersByIds, login, signup, logout, addFriend, getLoggedInUser};
