@@ -66,6 +66,7 @@ module.exports = {
     // TODO: improve this error check
     if (memberIds.length !== req.body.users.length) {
       res.status(404).send('At least 1 user you entered does not exist');
+      return;
     }
 
     // add current user ID to the list of IDs to be added
@@ -75,14 +76,19 @@ module.exports = {
     const newGroupChat = Chats({
       chatName: req.body.chatName,
       users: memberIds,
-      isGroupChat: false,
+      isGroupChat: true,
     });
 
     // save the new group chat to the database
     newGroupChat.save().then(
-      () => {
+      async () => {
         // add new chatId to each user
-
+        try {
+          await usersController.updateChatLists(newGroupChat._id, memberIds);
+        } catch (err) {
+          res.status(500).send('Internal Server Error');
+          return;
+        }
         // redirect to root on success
         res.status(200).redirect('/');
       },
@@ -92,5 +98,10 @@ module.exports = {
         res.status(500).send('Internal Server Error');
       }
     );
+  },
+
+  // create a direct message
+  createDirectMessage: async (req, res) => {
+    // TODO: complete this function
   },
 };
