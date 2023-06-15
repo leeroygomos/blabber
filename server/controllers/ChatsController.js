@@ -100,7 +100,6 @@ module.exports = {
       },
       (err) => {
         // send error if save fails
-        console.log(err);
         res.status(500).send('Internal Server Error');
       }
     );
@@ -125,16 +124,12 @@ module.exports = {
             userId,
           ]);
         } catch (err) {
-          res.status(500).send('Internal Server Error');
-          return;
+          throw new Error('Error updating chat list for user ' + userId);
         }
-        // redirect to root on success
-        res.status(200).redirect('/');
       },
       (err) => {
         // send error if save fails
-        console.log(err);
-        res.status(500).send('Internal Server Error');
+        throw new Error('Internal Server Error');
       }
     );
   },
