@@ -54,6 +54,12 @@ module.exports = {
 
   // create a group chat
   createGroupChat: async (req, res) => {
+    // check if current user is logged in
+    if (!req.session.userid) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+
     // get all users to be added
     let members = await usersController.getUsersByUsernames(req.body.users);
 
