@@ -51,7 +51,7 @@ app.use(express.urlencoded({ extended: true }));
 // );
 
 // set app ports and policies
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', port);
 
