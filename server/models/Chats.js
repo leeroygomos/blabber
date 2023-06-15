@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const ChatsSchema = new Schema({
   chatName: {
     type: String,
-    minLength: 3,
+    minLength: 0,
     maxLength: 255,
   },
   users: [String],
