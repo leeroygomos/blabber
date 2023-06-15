@@ -107,7 +107,35 @@ module.exports = {
   },
 
   // create a direct message
-  createDirectMessage: async (req, res) => {
-    // TODO: complete this function
+  createDirectMessage: async (friendId, userId) => {
+    // create a direct message object
+    const newDirectMessage = Chats({
+      chatName: '',
+      users: [friendId, userId],
+      isGroupChat: false,
+    });
+
+    // save the new direct message to the database
+    newDirectMessage.save().then(
+      async () => {
+        // add new chatId to each user
+        try {
+          await usersController.updateChatLists(newDirectMessage._id, [
+            friendId,
+            userId,
+          ]);
+        } catch (err) {
+          res.status(500).send('Internal Server Error');
+          return;
+        }
+        // redirect to root on success
+        res.status(200).redirect('/');
+      },
+      (err) => {
+        // send error if save fails
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+      }
+    );
   },
 };
