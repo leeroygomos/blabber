@@ -107,7 +107,7 @@ function App() {
     <div className="layout">
       { loading ? <h1>Loading...</h1> : //TODO: Add a real loading screen
       <>
-        <Sidebar/>
+        <Sidebar user={user}/>
         <Chat activeChats={activeChats}/>
       </>
       }

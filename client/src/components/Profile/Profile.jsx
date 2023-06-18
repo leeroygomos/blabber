@@ -1,7 +1,7 @@
 import './Profile.css';
 import placeholder from '../../assets/pip.jpg';
 
-export default function Profile(){
+export default function Profile({ userId, username, bio }){
     return(
         <div className="profile">
             <div>
@@ -9,8 +9,8 @@ export default function Profile(){
                 {/* <span class="status"></span> */}
             </div>
             <div className='info'>
-                <div className="username">pip</div>
-                <div>i like dinos.</div>
+                <div className="username">{ username }</div>
+                <div>{ bio }</div>
             </div>
         </div>
     );
