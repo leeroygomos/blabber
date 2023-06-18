@@ -41,17 +41,16 @@ async function signup(data, res){
     // check if a user with the username already exists
     let user = await usersService.getUserByUsername(data.username);
     if (user){
-        res.send("Username already taken!");
+        res.status(401).send({message: "Username already taken!"});
         return;
     }
-
     // hash password and create new user
     hashedPassword = await auth.hashPassword(data.password);
     const newUser = Users({
+        email: data.email,
         username: data.username,
         password: hashedPassword,
-        name: data.name,
-        bio: data.bio,
+        bio: "",
     });
 
     // save user then redirect to root page if successful
@@ -61,7 +60,7 @@ async function signup(data, res){
         },
         (err) => {
             console.log(err);
-            res.status(500).send('Internal Server Error');
+            res.status(500).send({message: 'Internal Server Error'});
         }
     );
 }

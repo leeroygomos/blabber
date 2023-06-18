@@ -6,10 +6,6 @@ module.exports = function(app){
         usersController.login(data.username, data.password, req, res);
     });
 
-    app.get('/users/getUser', function(req, res){
-        // do stuff
-    });
-
     app.post('/users/signup', function(req, res){
         data = req.body;
         usersController.signup(data,res);

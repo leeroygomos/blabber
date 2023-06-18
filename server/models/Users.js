@@ -11,6 +11,7 @@ const UsersSchema = new Schema({
   },
   password: String,
   name: String,
+  email: String,
   chatIds: [String],
   friendsList: [String],
   status: {

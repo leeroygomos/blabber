@@ -45,15 +45,15 @@ export default function Login(){
                 <div className="image"></div>
                 <form className="login-form" onSubmit={(event) => login(event)}>
                     <label className="label">Username</label>
-                    <input className="input-text" type="text" name="username" placeholder="Username" />
+                    <input className="input-text" type="text" name="username" placeholder="Username" required/>
                     <label className="label">Password</label>
-                    <input className="input-text" type="password" name="password" placeholder="Password" />
+                    <input className="input-text" type="password" name="password" placeholder="Password" required/>
                     <button className='input-button' type="submit">Login</button>
                 </form>
                 {incorrectCredentials ? <p className='error'> Incorrect username or password!</p> : <p className='hidden-error'>hello</p>}
                 <footer className="login-footer">
                     <a href="#">Forgot Password?</a>
-                    <a href="#">Create an Account</a>
+                    <a href="/signup">Create an Account</a>
                 </footer>
             </div>
         </div>
