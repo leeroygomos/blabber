@@ -7,7 +7,7 @@ export default function Login(){
     const [incorrectCredentials, setIncorrectCredentials] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:3001/users/getLoggedInUser', {credentials : "include"})
+        fetch('/users/getLoggedInUser', {credentials : "include"})
         .then(res => res.json())
         .then(data => {
           if (data?.username){
@@ -21,7 +21,7 @@ export default function Login(){
         console.log("login");
         console.log(event.target.username.value);
         console.log(event.target.password.value);
-        fetch('http://localhost:3001/users/login', {
+        fetch('/users/login', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
             credentials : "include",

@@ -10,7 +10,7 @@ export default function Sidebar({ user }){
     const [groups, setGroups] = useState([]);
 
     useEffect(() => {
-       fetch('http://localhost:3001/chats/getFriends', {credentials : "include"}) 
+       fetch('/chats/getFriends', {credentials : "include"}) 
        .then(res => res.json())
         .then(data => {
             console.log(data);
@@ -23,7 +23,7 @@ export default function Sidebar({ user }){
             console.log(error);
         });
 
-        fetch('http://localhost:3001/chats/getGroups', {credentials : "include"}) 
+        fetch('/chats/getGroups', {credentials : "include"}) 
        .then(res => res.json())
         .then(data => {
             console.log(data);
