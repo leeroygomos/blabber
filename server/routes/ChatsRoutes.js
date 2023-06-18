@@ -7,5 +7,4 @@ module.exports = function (app) {
 
   app.post('/chats/createGroupChat', chatsController.createGroupChat);
 
-  app.post('/chats/createDirectMessage', chatsController.createDirectMessage);
 };
