@@ -12,6 +12,7 @@ const UsersSchema = new Schema({
   password: String,
   name: String,
   chatIds: [String],
+  friendsList: [String],
   status: {
     type: String,
     default: 'offline',

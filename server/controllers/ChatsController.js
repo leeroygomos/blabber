@@ -1,5 +1,5 @@
 const Chats = require('../models/Chats');
-const usersController = require('./UsersController');
+const usersService = require('../services/UsersService');
 
 module.exports = {
   // get all friends (DMs) from current session
@@ -22,7 +22,7 @@ module.exports = {
     });
 
     // find all recipients
-    let recipients = await usersController.getUsersByIds(recipientIds);
+    let recipients = await usersService.getUsersByIds(recipientIds);
 
     // add recipient username to data
     let modifiedDirectMessages = directMessages.map((message) => {
@@ -61,7 +61,7 @@ module.exports = {
     }
 
     // get all users to be added
-    let members = await usersController.getUsersByUsernames(req.body.users);
+    let members = await usersService.getUsersByUsernames(req.body.users);
 
     // get all IDs to be added
     let memberIds = members.map((user) => {
@@ -90,7 +90,7 @@ module.exports = {
       async () => {
         // add new chatId to each user
         try {
-          await usersController.updateChatLists(newGroupChat._id, memberIds);
+          await usersService.updateChatLists(newGroupChat._id, memberIds);
         } catch (err) {
           res.status(500).send('Internal Server Error');
           return;
@@ -101,35 +101,6 @@ module.exports = {
       (err) => {
         // send error if save fails
         res.status(500).send('Internal Server Error');
-      }
-    );
-  },
-
-  // create a direct message
-  createDirectMessage: async (friendId, userId) => {
-    // create a direct message object
-    const newDirectMessage = Chats({
-      chatName: '',
-      users: [friendId, userId],
-      isGroupChat: false,
-    });
-
-    // save the new direct message to the database
-    newDirectMessage.save().then(
-      async () => {
-        // add new chatId to each user
-        try {
-          await usersController.updateChatLists(newDirectMessage._id, [
-            friendId,
-            userId,
-          ]);
-        } catch (err) {
-          throw new Error('Error updating chat list for user ' + userId);
-        }
-      },
-      (err) => {
-        // send error if save fails
-        throw new Error('Internal Server Error');
       }
     );
   },
