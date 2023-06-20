@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser');
 mongoose.connect(process.env.MONGODB_URL);
 
 // set up request parsers
-app.use(express.json());
+app.use(express.json({ limit: '4mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // const Users = require('./models/Users');
@@ -51,7 +51,7 @@ app.use(express.urlencoded({ extended: true }));
 // );
 
 // set app ports and policies
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', port);
 
