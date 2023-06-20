@@ -1,0 +1,27 @@
+.profile-modal {
+    background-color: #242424;
+    color: white;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 3rem;
+    width: 30rem;
+    height: 40rem;
+}
+
+.profile-modal-content {
+    width: 100%;
+    height: 100%;
+}
+
+.profile-modal-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

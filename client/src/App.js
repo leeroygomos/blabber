@@ -4,6 +4,7 @@ import { socket } from './socket';
 import Chat from './components/Chat/Chat';
 import Sidebar from './components/Sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
+import UpdateProfileModal from './components/UpdateProfileModal/UpdateProfileModal';
 
 function App() {
   // const [isConnected, setIsConnected] = useState(socket.connected);
@@ -12,6 +13,7 @@ function App() {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   useEffect(() => {
     fetch('/users/getLoggedInUser', { credentials: 'include' })
@@ -188,6 +190,11 @@ function App() {
   //   setMessage(event.target.value);
   // };
 
+  const toggleShowProfileModal = () => {
+    setShowProfileModal(!showProfileModal);
+    console.log(showProfileModal);
+  };
+
   return (
     // <div>
     //   {isConnected ? <p>Server is connected</p> : <p>Server bad</p>}
@@ -213,8 +220,12 @@ function App() {
         <h1>Loading...</h1> //TODO: Add a real loading screen
       ) : (
         <>
-          <Sidebar user={user} />
+          <Sidebar
+            updateShowProfileModal={toggleShowProfileModal}
+            user={user}
+          />
           <Chat activeChats={activeChats} />
+          {showProfileModal ? <UpdateProfileModal /> : <></>}
         </>
       )}
     </div>
