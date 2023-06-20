@@ -20,6 +20,11 @@ async function login(username, password, req, res) {
       req.session.username = user.username;
       req.session.name = user.name;
       req.session.chatIds = user.chatIds;
+      req.session.status = 'online';
+      req.session.avatar = user.avatar;
+      req.session.bio = user.bio;
+      req.session.frientsList = user.frientsList;
+      req.session.email = user.email;
 
       // update user status to online
       user.status = 'online';
@@ -110,7 +115,19 @@ async function addFriend(req, res) {
 }
 
 function getLoggedInUser(req, res) {
-  res.json({ id: req.session?.userid, username: req.session?.username });
+  res.json(
+        { 
+            id: req.session?.userid, 
+            username: req.session?.username,
+            name: req.session?.name,
+            chatIds: req.session?.chatIds,
+            friendsList: req.session?.friendsList,
+            status: req.session?.status,
+            avatar: req.session?.avatar,
+            bio: req.session?.bio, 
+            email: req.session?.email,
+        }
+    );
 }
 
 async function uploadAvatar(req, res) {
