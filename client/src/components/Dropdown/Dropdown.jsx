@@ -40,6 +40,7 @@ export default function Dropdown({title, list}){
                                     <img src={item.img} alt="avatar" />
                                     <div className="info">
                                         <div className="username">{item.name}</div>
+                                        <div>{item.bio ? item.bio : ""}</div>
                                     </div>
                                 </li>
                     })}

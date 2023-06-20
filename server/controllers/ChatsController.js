@@ -30,6 +30,9 @@ module.exports = {
       messageObj.username = recipients.find((recipient) =>
         message.users.includes(recipient._id)
       ).username;
+      messageObj.bio = recipients.find((recipient) =>
+        message.users.includes(recipient._id)
+      ).bio;
       return messageObj;
     });
 

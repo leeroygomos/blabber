@@ -16,7 +16,7 @@ export default function Sidebar({ user }){
             console.log(data);
             setFriends(data.map((friend) => {
                 friend.img = pfp;
-                return { chatId: friend._id, name: friend.username, img: friend.img }
+                return { chatId: friend._id, name: friend.username, img: friend.img, bio: friend.bio }
             }))
         })
         .catch((error) => {
