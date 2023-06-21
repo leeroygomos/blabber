@@ -76,7 +76,7 @@ async function logout(req, res) {
 
   // destroy session and redirect to root page
   req.session.destroy();
-  res.redirect('/');
+  res.status(200).redirect('/');
 }
 
 async function addFriend(req, res) {
@@ -115,19 +115,17 @@ async function addFriend(req, res) {
 }
 
 function getLoggedInUser(req, res) {
-  res.json(
-        { 
-            id: req.session?.userid, 
-            username: req.session?.username,
-            name: req.session?.name,
-            chatIds: req.session?.chatIds,
-            friendsList: req.session?.friendsList,
-            status: req.session?.status,
-            avatar: req.session?.avatar,
-            bio: req.session?.bio, 
-            email: req.session?.email,
-        }
-    );
+  res.json({
+    id: req.session?.userid,
+    username: req.session?.username,
+    name: req.session?.name,
+    chatIds: req.session?.chatIds,
+    friendsList: req.session?.friendsList,
+    status: req.session?.status,
+    avatar: req.session?.avatar,
+    bio: req.session?.bio,
+    email: req.session?.email,
+  });
 }
 
 async function uploadAvatar(req, res) {
