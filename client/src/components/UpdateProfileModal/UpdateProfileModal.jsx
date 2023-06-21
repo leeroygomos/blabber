@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './UpdateProfileModal.css';
 
 export default function UpdateProfileModal({ closeProfileModal }){

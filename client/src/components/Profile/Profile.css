@@ -8,6 +8,10 @@
     justify-content: flex-start;
 }
 
+.avatar-container {
+    position: relative;
+}
+
 .avatar {
     width: 5em;
     height: auto;
@@ -15,18 +19,12 @@
     cursor: pointer;
 }
 
+.avatar:hover {
+    opacity: 0.5;
+}
+
 .username {
     font-weight: bolder;
     font-size: x-large;
     margin-bottom: 0.5em;
 }
-
-/* .status {
-    height: 2px;
-    width: 2px;
-    background-color: #3AA8AF;
-    border-radius: 50%;
-    display: inline-block;
-    position: relative;
-    bottom: 3;
-} */
