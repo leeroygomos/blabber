@@ -25,22 +25,22 @@ export default function Dropdown({title, list}){
         <div className="dropdown">
             <button className="toggle-btn" onClick={ toggleOpen }>
                 {isOpen ? <div>
-                        <span><FontAwesomeIcon icon={faCaretDown} style={{color: "#ffffff",}} /></span>
+                        <span><FontAwesomeIcon icon={ faCaretDown } style={{ color: "#ffffff", }} /></span>
                         <span className="title">{ title }</span>
                     </div> : <div>
-                        <span><FontAwesomeIcon icon={faCaretRight} style={{color: "#ffffff",}} /></span>
+                        <span><FontAwesomeIcon icon={ faCaretRight } style={{ color: "#ffffff", }} /></span>
                         <span className="title">{ title }</span>
                     </div>}
-                <span><button className="add-btn" onClick={openModal}><FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}} /></button></span>
+                <span><button className="add-btn" onClick={ openModal }><FontAwesomeIcon icon={ faPlus } style={{ color: "#ffffff", }} /></button></span>
             </button>
             {isOpen ? <div className="dropdown-list">
                 <ul>
                     {list.map((item, index) => {
-                        return <li key={index} onClick={openChat}>
-                                    <img src={item.img} alt="avatar" />
+                        return <li key={ index } onClick={ openChat }>
+                                    <img src={ item.img } alt="avatar" />
                                     <div className="info">
-                                        <div className="username">{item.name}</div>
-                                        <div>{item.bio ? item.bio : ""}</div>
+                                        <div className="username">{ item.name }</div>
+                                        <div>{ item.bio ? item.bio : "" }</div>
                                     </div>
                                 </li>
                     })}

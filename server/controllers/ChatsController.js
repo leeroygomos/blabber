@@ -33,6 +33,9 @@ module.exports = {
       messageObj.bio = recipients.find((recipient) =>
         message.users.includes(recipient._id)
       ).bio;
+      messageObj.avatar = recipients.find((recipient) =>
+        message.users.includes(recipient._id)
+      ).avatar;
       return messageObj;
     });
 

@@ -14,8 +14,7 @@ export default function Sidebar({ updateShowProfileModal, user }){
        .then(res => res.json())
         .then(data => {
             setFriends(data.map((friend) => {
-                friend.img = pfp;
-                return { chatId: friend._id, name: friend.username, img: friend.img, bio: friend.bio }
+                return { chatId: friend._id, name: friend.username, img: friend.avatar, bio: friend.bio }
             }))
         })
         .catch((error) => {
