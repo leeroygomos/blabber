@@ -4,7 +4,7 @@ import Dropdown from '../Dropdown/Dropdown';
 import pfp from '../../assets/pip.jpg';
 import { useEffect, useState } from 'react';
 
-export default function Sidebar({ updateShowProfileModal, user }){
+export default function Sidebar({ closeProfileModal, updateShowProfileModal, user }){
 
     const [friends, setFriends] = useState([]);
     const [groups, setGroups] = useState([]);

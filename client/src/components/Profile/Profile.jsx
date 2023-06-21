@@ -6,7 +6,7 @@ export default function Profile({ updateShowProfileModal, userId, username, bio,
     return(
         <div className="profile">
             <div>
-                <img onClick={() => {updateShowProfileModal();}} src={avatar || placeholder} alt="avatar" className="avatar"/>
+                <img onClick={() => updateShowProfileModal()} src={avatar || placeholder} alt="avatar" className="avatar"/>
                 {/* <span class="status"></span> */}
             </div>
             <div className='info'>

@@ -192,7 +192,10 @@ function App() {
 
   const toggleShowProfileModal = () => {
     setShowProfileModal(!showProfileModal);
-    console.log(showProfileModal);
+  };
+
+  const closeProfileModal = () => {
+    setShowProfileModal(false);
   };
 
   return (
@@ -225,7 +228,11 @@ function App() {
             user={user}
           />
           <Chat activeChats={activeChats} />
-          {showProfileModal ? <UpdateProfileModal /> : <></>}
+          {showProfileModal ? (
+            <UpdateProfileModal closeProfileModal={closeProfileModal} />
+          ) : (
+            <></>
+          )}
         </>
       )}
     </div>
