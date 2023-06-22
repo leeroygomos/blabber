@@ -70,6 +70,7 @@ app.use(cookieParser());
 // routes
 require('./routes/UsersRoutes')(app);
 require('./routes/ChatsRoutes')(app);
+require('./routes/MessagesRoutes')(app);
 
 app.get('/', (req, res) => {
   if ('username' in req.session) {
