@@ -11,6 +11,7 @@
     padding: 3rem;
     width: 30rem;
     height: 30rem;
+    z-index: 10;
 }
 
 .profile-modal-content {

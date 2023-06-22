@@ -229,7 +229,10 @@ function App() {
           />
           <Chat activeChats={activeChats} />
           {showProfileModal ? (
-            <UpdateProfileModal closeProfileModal={closeProfileModal} />
+            <>
+              <UpdateProfileModal closeProfileModal={closeProfileModal} />
+              <div className="overlay"></div>
+            </>
           ) : (
             <></>
           )}
