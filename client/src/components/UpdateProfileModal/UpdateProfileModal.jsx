@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './UpdateProfileModal.css';
 
 export default function UpdateProfileModal({ closeProfileModal }){
     const [ image, setImage ] = useState({ avatar: "" });
+    const ref = useRef();
 
     const handleSubmit = (e) => {
         // check if user has uploaded a new avatar
@@ -50,8 +51,23 @@ export default function UpdateProfileModal({ closeProfileModal }){
         })
     }
 
+    useEffect(() => {
+        const handleOutsideClick = e => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                 closeProfileModal();
+            }
+        }
+        const timeoutId = setTimeout(() => {
+            document.addEventListener("click", handleOutsideClick, false);
+        }, 0);
+        return () => {
+            clearTimeout(timeoutId);
+            document.removeEventListener("click", handleOutsideClick, false);
+        };
+    }, [closeProfileModal]);
+
     return (
-        <div className='profile-modal'>
+        <div className='profile-modal' ref={ref}>
             <div className='profile-modal-content'>
                 <div className="profile-modal-header">
                     <div className='profile-modal-title'>Update Profile</div>
