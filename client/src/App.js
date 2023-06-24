@@ -26,7 +26,7 @@ function App() {
           navigate('/login');
         }
       });
-  }, []);
+  }, [navigate]);
 
   const [activeChats, setActiveChats] = useState([
     {
