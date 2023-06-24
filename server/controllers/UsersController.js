@@ -146,11 +146,51 @@ async function uploadAvatar(req, res) {
   }
 }
 
+async function updateProfile(req, res) {
+  // Check if request is authorized
+  if (!req.session) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
+
+  // check if a user with the username already exists
+  let user = await usersService.getUserByUsername(req.body.username);
+  if (user && user._id.toString() !== req.session.userid) {
+    res.status(401).send({ message: 'Username already taken!' });
+    return;
+  }
+
+  // check if a user with the email already exists
+  user = await usersService.getUserByEmail(req.body.email);
+  if (user && user._id.toString() !== req.session.userid) {
+    res.status(401).send({ message: 'Email already taken!' });
+    return;
+  }
+
+  // update current user's profile
+  try {
+    const filter = { _id: req.session.userid };
+    const update = {
+      avatar: req.body.avatar || req.session.avatar,
+      username: req.body.username,
+      email: req.body.email,
+      bio: req.body.bio,
+    };
+    console.log(update);
+    await Users.findOneAndUpdate(filter, update);
+
+    res.status(204).json('Profile Updated!');
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+}
+
 module.exports = {
   login,
   signup,
   logout,
   addFriend,
   getLoggedInUser,
+  updateProfile,
   uploadAvatar,
 };
