@@ -1,34 +1,36 @@
 import { useState, useRef, useEffect } from 'react';
 import './UpdateProfileModal.css';
 
-export default function UpdateProfileModal({ closeProfileModal }){
+export default function UpdateProfileModal({ closeProfileModal, username, bio, email }){
     const [ image, setImage ] = useState({ avatar: "" });
+    const [ newUsername, setNewUsername ] = useState(username);
+    const [ newEmail, setNewEmail] = useState(email);
+    const [ newBio, setNewBio ] = useState(bio);
+    const [ errMsg, setErrMsg] = useState(null);
     const ref = useRef();
 
     const handleSubmit = (e) => {
-        // check if user has uploaded a new avatar
-        if(!image.avatar) {
-            closeProfileModal()
-            return;
-        }
-
         e.preventDefault();
         const requestOptions = {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(image),
+            body: JSON.stringify({ avatar: image.avatar, 
+                                   username: newUsername, 
+                                   email: newEmail, 
+                                   bio: newBio }),
             credentials: "include",
         };
-        fetch('/users/uploadAvatar', requestOptions) 
-        .then(res => res.json())
+        fetch('/users/updateProfile', requestOptions) 
+        .then(res => {
+            if (res.status === 204){
+                closeProfileModal();
+            }
+            return res.json();
+        })
         .then(data => {
             console.log(data);
+            setErrMsg(data.message);
         })
-        .catch((error) => {
-            console.log(error);
-        });
-
-        closeProfileModal()
     }
 
     const handleFileUpload = async (e) => {
@@ -86,19 +88,29 @@ export default function UpdateProfileModal({ closeProfileModal }){
                         <input type="text" 
                                name="username" 
                                id="edit-username" 
-                               placeholder='This is not functional yet!'
+                               defaultValue={ username }
+                               onChange={(e) => setNewUsername(e.target.value)}
                         />
                         <label htmlFor="edit-bio">Bio</label>
                         <input type="text" 
                                name="bio" 
                                id="edit-bio" 
-                               placeholder='This is not functional yet!'
+                               defaultValue={ bio }
+                               onChange={(e) => setNewBio(e.target.value)}
+                        />
+                        <label htmlFor="edit-email">Email</label>
+                        <input type="email" 
+                               name="email" 
+                               id="edit-email" 
+                               defaultValue={ email }
+                               onChange={(e) => setNewEmail(e.target.value)}
                         />
                     </div>
+                    { errMsg ? <p className='error'>{ errMsg }</p> : <></>}
                     <div className='profile-modal-footer'>
                         <button className='save-btn'>Save</button>
                     </div>    
-                </form>                
+                </form>  
             </div>
         </div>
     )
