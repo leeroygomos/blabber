@@ -89,6 +89,7 @@ module.exports = {
       chatName: req.body.chatName,
       users: memberIds,
       isGroupChat: true,
+      avatar: req.body.avatar || '',
     });
 
     // save the new group chat to the database

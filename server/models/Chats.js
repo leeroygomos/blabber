@@ -12,6 +12,7 @@ const ChatsSchema = new Schema({
   },
   users: [String],
   isGroupChat: Boolean,
+  avatar: String,
 });
 
 // Compile model from schema
