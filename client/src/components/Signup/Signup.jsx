@@ -1,6 +1,7 @@
 import './Signup.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import logo from '../../assets/logo.svg';
 
 export default function Signup(){
     const navigate = useNavigate();
@@ -41,16 +42,24 @@ export default function Signup(){
     return (
         <div className="signup-container">
             <div className="signup">
-                <div className="image"></div>
+                <img className="login-logo" src={logo} alt="blabber-logo" />
                 <form className="signup-form" onSubmit={(event) => signup(event)}>
-                <label className="label">Email</label>
-                    <input className="input-text" type="email" name="email" placeholder="Email" required/>
-                    <label className="label">Username</label>
-                    <input className="input-text" type="text" name="username" placeholder="Username" required/>
-                    <label className="label">Password</label>
-                    <input className="input-text" type="password" name="password" placeholder="Password" required/>
-                    <label className="label">Confirm Password</label>
-                    <input className="input-text" type="password" name="confirm_password" placeholder="Confirm Password" required/>
+                    <div>
+                        <label className="label">Email</label>
+                        <input className="input-text" type="email" name="email" placeholder="Email" required/>  
+                    </div>
+                    <div>
+                        <label className="label">Username</label>
+                        <input className="input-text" type="text" name="username" placeholder="Username" required/> 
+                    </div>
+                    <div>
+                        <label className="label">Password</label>
+                        <input className="input-text" type="password" name="password" placeholder="Password" required/>
+                    </div>
+                    <div>
+                        <label className="label">Confirm Password</label>
+                        <input className="input-text" type="password" name="confirm_password" placeholder="Confirm Password" required/>
+                    </div>
                     <button className='input-button-signup' type="submit">Signup</button>
                 </form>
                 {errorMsg ? <p className='error'>{errorMsg}</p> : <p className='hidden-error'>hello</p>}

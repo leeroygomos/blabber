@@ -19,12 +19,10 @@
     box-shadow: 5px 5px #000000b0;
 }
 
-.image {
+.login-logo {
     margin-top: 10%;
     width: 30%;
     height: 25%;
-    border-radius: 100%;
-    background-color: #FFC700;
 }
 
 .login-form {
@@ -32,34 +30,37 @@
     flex-direction: column;
     justify-content: center;
     width: 80%;
+    row-gap: 1rem;
 }
 
 .input-text {
     width: 100%;
     height: 3rem;
-    border-radius: 15px;
-    padding-left: 2%;
-    font-size: large;
+    border-radius: 20px;
     box-sizing: border-box;
-    outline-color: white;
-    outline-width: 0;
+    padding-left: 1rem;
+    border: none;
+}
+
+.input-text::placeholder {
+    font-size: medium;
 }
 
 .label {
-    padding-top: 10%;
     font-size: small;
-    padding-bottom: 1%;
+    margin-bottom: 0.5rem;
 }
 
 .input-button {
-    height: 15%;
-    width: 25%;
+    height: fit-content;
+    width: fit-content;
     background-color: #3AA8AF;
     color: white;
     border-style: none;
-    margin: 7% 7% 0% 7%;
     align-self: center;
     border-radius: 25px;
+    box-sizing: border-box;
+    padding: 0.5em 2em;
 }
 
 .input-button:hover{

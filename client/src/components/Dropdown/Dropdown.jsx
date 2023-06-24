@@ -37,7 +37,7 @@ export default function Dropdown({title, list}){
                 <ul>
                     {list.map((item, index) => {
                         return <li key={ index } onClick={ openChat }>
-                                    <img src={ item.img } alt="avatar" />
+                                    <img className="list-avatar" src={ item.img } alt="avatar" />
                                     <div className="info">
                                         <div className="username">{ item.name }</div>
                                         <div>{ item.bio ? item.bio : "" }</div>

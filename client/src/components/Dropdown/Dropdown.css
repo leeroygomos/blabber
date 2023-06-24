@@ -56,7 +56,7 @@ li {
     cursor: pointer;
 }
 
-img {
+.list-avatar {
     width: 3em;
     height: auto;
     border-radius: 50%;

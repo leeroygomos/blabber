@@ -1,6 +1,7 @@
 import "./Login.css";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import logo from '../../assets/logo.svg';
 
 export default function Login(){
     const navigate = useNavigate();
@@ -18,9 +19,6 @@ export default function Login(){
 
     const login = (event) => {
         event.preventDefault();
-        console.log("login");
-        console.log(event.target.username.value);
-        console.log(event.target.password.value);
         fetch('/users/login', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
@@ -42,12 +40,16 @@ export default function Login(){
     return (
         <div className="login-container">
             <div className="login">
-                <div className="image"></div>
+                <img className="login-logo" src={logo} alt="blabber-logo" />
                 <form className="login-form" onSubmit={(event) => login(event)}>
-                    <label className="label">Username</label>
-                    <input className="input-text" type="text" name="username" placeholder="Username" required/>
-                    <label className="label">Password</label>
-                    <input className="input-text" type="password" name="password" placeholder="Password" required/>
+                    <div>
+                        <label className="label">Username</label>
+                        <input className="input-text" type="text" name="username" placeholder="Username" required/>
+                    </div>
+                    <div>
+                        <label className="label">Password</label>
+                        <input className="input-text" type="password" name="password" placeholder="Password" required/>
+                    </div>
                     <button className='input-button' type="submit">Login</button>
                 </form>
                 {incorrectCredentials ? <p className='error'> Incorrect username or password!</p> : <p className='hidden-error'>hello</p>}
