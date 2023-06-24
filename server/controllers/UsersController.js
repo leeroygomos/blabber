@@ -128,24 +128,6 @@ function getLoggedInUser(req, res) {
   });
 }
 
-async function uploadAvatar(req, res) {
-  // Check if request is authorized
-  if (!req.session) {
-    res.status(401).send('Unauthorized');
-    return;
-  }
-
-  // update currently logged in user's avatar
-  try {
-    const filter = { _id: req.session?.userid };
-    const update = req.body;
-    await Users.findOneAndUpdate(filter, update);
-    res.status(201).json('Avatar Uploaded!');
-  } catch (error) {
-    res.status(500).send('Internal Server Error');
-  }
-}
-
 async function updateProfile(req, res) {
   // Check if request is authorized
   if (!req.session) {
@@ -192,5 +174,4 @@ module.exports = {
   addFriend,
   getLoggedInUser,
   updateProfile,
-  uploadAvatar,
 };

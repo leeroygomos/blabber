@@ -27,10 +27,6 @@ module.exports = function (app) {
     usersController.addFriend(req, res);
   });
 
-  app.post('/users/uploadAvatar', function (req, res) {
-    usersController.uploadAvatar(req, res);
-  });
-
   app.put('/users/updateProfile', function (req, res) {
     usersController.updateProfile(req, res);
   });
