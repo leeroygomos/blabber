@@ -146,22 +146,6 @@ async function uploadAvatar(req, res) {
   }
 }
 
-async function getAvatar(req, res) {
-  // Check if request is authorized
-  if (!req.session) {
-    res.status(401).send('Unauthorized');
-    return;
-  }
-
-  // get currently logged in user's avatar
-  try {
-    const user = await Users.find({ _id: req.session.userid });
-    res.json(user.avatar);
-  } catch (error) {
-    res.status(500).send('Internal Server Error');
-  }
-}
-
 module.exports = {
   login,
   signup,
@@ -169,5 +153,4 @@ module.exports = {
   addFriend,
   getLoggedInUser,
   uploadAvatar,
-  getAvatar,
 };

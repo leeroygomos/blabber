@@ -30,8 +30,4 @@ module.exports = function (app) {
   app.post('/users/uploadAvatar', function (req, res) {
     usersController.uploadAvatar(req, res);
   });
-
-  app.get('/users/getAvatar', function (req, res) {
-    usersController.getAvatar(req, res);
-  });
 };
