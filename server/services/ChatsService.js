@@ -1,8 +1,9 @@
 const Chats = require('../models/Chats');
+const usersService = require('../services/UsersService');
 
 module.exports = {
-// create a direct message
-createDirectMessage: async (friendId, userId) => {
+  // create a direct message
+  createDirectMessage: async (friendId, userId) => {
     // create a direct message object
     const newDirectMessage = Chats({
       chatName: '',
@@ -15,7 +16,7 @@ createDirectMessage: async (friendId, userId) => {
       async () => {
         // add new chatId to each user
         try {
-          await usersController.updateChatLists(newDirectMessage._id, [
+          await usersService.updateChatLists(newDirectMessage._id, [
             friendId,
             userId,
           ]);
