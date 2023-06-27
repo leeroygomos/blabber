@@ -4,16 +4,10 @@ import Dropdown from '../Dropdown/Dropdown';
 import pfp from '../../assets/pip.jpg';
 import { useEffect, useState } from 'react';
 
-export default function Sidebar({ closeProfileModal, updateShowProfileModal, currentUser }){
+export default function Sidebar({ closeProfileModal, updateShowProfileModal, user }){
 
     const [friends, setFriends] = useState([]);
     const [groups, setGroups] = useState([]);
-    const [user, setUser] = useState(currentUser);
-
-    useEffect(() => {
-        setUser(currentUser);
-        console.log(user.bio);
-    },[currentUser]);
 
     useEffect(() => {
        fetch('/chats/getFriends', {credentials : "include"}) 
@@ -44,11 +38,7 @@ export default function Sidebar({ closeProfileModal, updateShowProfileModal, cur
     return(
         <div className="sidebar">
             <Profile  updateShowProfileModal={ updateShowProfileModal } 
-                    //   userId={ user.id } 
-                    //   username={ user.username } 
-                    //   bio={ user.bio ? user.bio : ""} 
-                    //   avatar={ user.avatar ? user.avatar : "" }
-                      currentUser={user}>
+                      user={user}>
             </Profile>
             <Dropdown title={ 'Friends' } list={ friends }></Dropdown>
             <Dropdown title={ 'Groups' } list={ groups }></Dropdown>

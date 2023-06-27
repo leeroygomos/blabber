@@ -158,10 +158,13 @@ async function updateProfile(req, res) {
       email: req.body.email,
       bio: req.body.bio,
     };
-    console.log(update);
-    await Users.findOneAndUpdate(filter, update);
-
-    res.status(204).json('Profile Updated!');
+    Users.findOneAndUpdate(filter, update, {new: true}).then((data) => {
+      req.session.avatar = data.avatar;
+      req.session.username = data.username;
+      req.session.email = data.email;
+      req.session.bio = data.bio;
+      res.status(204).json('Profile Updated!');
+    })
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }

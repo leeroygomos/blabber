@@ -1,17 +1,11 @@
 import './Profile.css';
 import placeholder from '../../assets/pip.jpg';
 import ProfileOptions from '../ProfileOptions/ProfileOptions';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-export default function Profile({ updateShowProfileModal, userId, username, bio, avatar, currentUser }){
+export default function Profile({ updateShowProfileModal, user }){
 
     const [showOptions, setShowOptions] = useState(false);
-    const [user, setUser] = useState(currentUser);
-
-    useEffect(() => {
-        setUser(currentUser);
-        console.log(currentUser.bio)
-    }, [currentUser]);
 
     const closeOptions = () => {
         setShowOptions(false);

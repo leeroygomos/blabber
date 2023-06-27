@@ -16,15 +16,12 @@ function App() {
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const refreshUserData = async () => {
-    setUser({});
     setLoading(true);
-    setUser({});
     fetch('/users/getLoggedInUser', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
         if (data?.username) {
           setUser(data);
-          console.log(user.bio);
           setLoading(false);
         } else {
           navigate('/login');
@@ -33,16 +30,6 @@ function App() {
   };
 
   useEffect(() => {
-    // fetch('/users/getLoggedInUser', { credentials: 'include' })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data?.username) {
-    //       setUser(data);
-    //       setLoading(false);
-    //     } else {
-    //       navigate('/login');
-    //     }
-    //   });
     refreshUserData();
   }, []);
 
@@ -243,7 +230,7 @@ function App() {
         <>
           <Sidebar
             updateShowProfileModal={toggleShowProfileModal}
-            currentUser={user}
+            user={user}
           />
           <Chat activeChats={activeChats} />
           {showProfileModal ? (
@@ -254,7 +241,6 @@ function App() {
                 bio={user.bio || ''}
                 email={user.email || ''}
                 refreshUserData={refreshUserData}
-                setUser={setUser}
               />
               <div className="overlay"></div>
             </>

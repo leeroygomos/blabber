@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import './UpdateProfileModal.css';
 
-export default function UpdateProfileModal({ closeProfileModal, username, bio, email, refreshUserData, setUser }){
+export default function UpdateProfileModal({ closeProfileModal, username, bio, email, refreshUserData }){
     const [ image, setImage ] = useState({ avatar: "" });
     const [ newUsername, setNewUsername ] = useState(username);
     const [ newEmail, setNewEmail] = useState(email);
@@ -23,15 +23,15 @@ export default function UpdateProfileModal({ closeProfileModal, username, bio, e
         fetch('/users/updateProfile', requestOptions) 
         .then(res => {
             if (res.status === 204){
-                setUser({})
-                refreshUserData().then(() => closeProfileModal());
-                // closeProfileModal();
-                
+                refreshUserData();
+                closeProfileModal();
+                return '';
             }
-            return res.json();
+            else{
+                return res.json();
+            }
         })
         .then(data => {
-            console.log(data);
             setErrMsg(data.message);
         })
     }
