@@ -5,6 +5,7 @@ import Chat from './components/Chat/Chat';
 import Sidebar from './components/Sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import UpdateProfileModal from './components/UpdateProfileModal/UpdateProfileModal';
+import AddFriendModal from './components/AddFriendModal/AddFriendModal';
 
 function App() {
   // const [isConnected, setIsConnected] = useState(socket.connected);
@@ -14,6 +15,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showAddFriendModal, setAddFriendModal] = useState(false);
 
   useEffect(() => {
     fetch('/users/getLoggedInUser', { credentials: 'include' })
@@ -194,8 +196,16 @@ function App() {
     setShowProfileModal(!showProfileModal);
   };
 
+  const toggleAddFriendModal = () => {
+    setAddFriendModal(!showAddFriendModal);
+  };
+
   const closeProfileModal = () => {
     setShowProfileModal(false);
+  };
+
+  const closeAddFriendModal = () => {
+    setAddFriendModal(false);
   };
 
   return (
@@ -225,6 +235,7 @@ function App() {
         <>
           <Sidebar
             updateShowProfileModal={toggleShowProfileModal}
+            updateAddFriendModal={toggleAddFriendModal}
             user={user}
           />
           <Chat activeChats={activeChats} />
@@ -236,6 +247,14 @@ function App() {
                 bio={user.bio || ''}
                 email={user.email || ''}
               />
+              <div className="overlay"></div>
+            </>
+          ) : (
+            <></>
+          )}
+          {showAddFriendModal ? (
+            <>
+              <AddFriendModal closeAddFriendModal={closeAddFriendModal} />
               <div className="overlay"></div>
             </>
           ) : (

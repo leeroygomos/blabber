@@ -4,7 +4,7 @@ import Dropdown from '../Dropdown/Dropdown';
 import pfp from '../../assets/pip.jpg';
 import { useEffect, useState } from 'react';
 
-export default function Sidebar({ closeProfileModal, updateShowProfileModal, user }){
+export default function Sidebar({ closeProfileModal, updateShowProfileModal, updateAddFriendModal, user }){
 
     const [friends, setFriends] = useState([]);
     const [groups, setGroups] = useState([]);
@@ -43,7 +43,9 @@ export default function Sidebar({ closeProfileModal, updateShowProfileModal, use
                       bio={ user.bio ? user.bio : ""} 
                       avatar={ user.avatar ? user.avatar : "" }>
             </Profile>
-            <Dropdown title={ 'Friends' } list={ friends }></Dropdown>
+            <Dropdown title={ 'Friends' } 
+                      list={ friends }
+                      openModal = { updateAddFriendModal }></Dropdown>
             <Dropdown title={ 'Groups' } list={ groups }></Dropdown>
         </div>
     );

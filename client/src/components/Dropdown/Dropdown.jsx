@@ -3,17 +3,12 @@ import './Dropdown.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretRight, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-export default function Dropdown({title, list}){
+export default function Dropdown({title, list, openModal}){
 
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleOpen = () => {
         setIsOpen(!isOpen);
-    }
-
-    const openModal = () => {
-        // open either 1. modal to add a friend or 2. modal to add a group
-        console.log("open add modal");
     }
 
     const openChat = () => {
@@ -22,7 +17,8 @@ export default function Dropdown({title, list}){
     }
 
     return(
-        <div className="dropdown">
+        <div>
+            <div className="dropdown">
             <button className="toggle-btn" onClick={ toggleOpen }>
                 {isOpen ? <div>
                         <span><FontAwesomeIcon icon={ faCaretDown } style={{ color: "#ffffff", }} /></span>
@@ -31,7 +27,7 @@ export default function Dropdown({title, list}){
                         <span><FontAwesomeIcon icon={ faCaretRight } style={{ color: "#ffffff", }} /></span>
                         <span className="title">{ title }</span>
                     </div>}
-                <span><button className="add-btn" onClick={ openModal }><FontAwesomeIcon icon={ faPlus } style={{ color: "#ffffff", }} /></button></span>
+                <span><button className="add-btn" onClick={() => openModal()}><FontAwesomeIcon icon={ faPlus } style={{ color: "#ffffff", }} /></button></span>
             </button>
             {isOpen ? <div className="dropdown-list">
                 <ul>
@@ -45,7 +41,8 @@ export default function Dropdown({title, list}){
                                 </li>
                     })}
                 </ul>
-            </div> : <></>}
+                </div> : <></>}
+            </div>
         </div>
     );
 }
