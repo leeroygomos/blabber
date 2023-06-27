@@ -81,21 +81,21 @@ async function logout(req, res) {
 
 async function addFriend(req, res) {
   // check if a user with the given username exists
-  let friend = await usersService.getUserByUsername(req.params.username);
+  let friend = await usersService.getUserByUsername(req.body.username);
   if (!friend) {
-    res.send('User not found!');
+    res.send({ message: 'User not found!' });
     return;
   }
   // check if user is you
   else if (friend.username === req.session.username) {
-    res.send('You cannot befriend yourself');
+    res.send({ message: 'You cannot befriend yourself' });
     return;
   }
 
   // check if user is already friends
   let user = await usersService.getUserByUsername(req.session.username);
   if (user.friendsList.includes(friend._id)) {
-    res.status(401).send('You are already friends');
+    res.status(401).send({ message: 'You are already friends' });
     return;
   } else {
     // create direct message between user and friend
@@ -105,7 +105,7 @@ async function addFriend(req, res) {
       friend.friendsList.push(user._id);
       await user.save();
       await friend.save();
-      res.status(200).send('Friend added');
+      res.status(200).json('Friend added');
     } catch (err) {
       console.log(err);
       res.status(500).send('Internal Server Error');

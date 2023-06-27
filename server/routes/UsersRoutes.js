@@ -15,15 +15,11 @@ module.exports = function (app) {
     usersController.logout(req, res);
   });
 
-  app.post('/users/addFriend/:username', function (req, res) {
-    usersController.addFriend(req, res);
-  });
-
   app.get('/users/getLoggedInUser', function (req, res) {
     usersController.getLoggedInUser(req, res);
   });
 
-  app.post('/users/addFriend/:username', function (req, res) {
+  app.post('/users/addFriend', function (req, res) {
     usersController.addFriend(req, res);
   });
 
