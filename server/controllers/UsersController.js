@@ -23,7 +23,7 @@ async function login(username, password, req, res) {
       req.session.status = 'online';
       req.session.avatar = user.avatar;
       req.session.bio = user.bio;
-      req.session.frientsList = user.frientsList;
+      req.session.friendsList = user.friendsList;
       req.session.email = user.email;
 
       // update user status to online
