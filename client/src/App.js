@@ -17,7 +17,8 @@ function App() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showAddFriendModal, setAddFriendModal] = useState(false);
 
-  useEffect(() => {
+  const refreshUserData = async () => {
+    setLoading(true);
     fetch('/users/getLoggedInUser', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
@@ -28,7 +29,11 @@ function App() {
           navigate('/login');
         }
       });
-  }, [navigate]);
+  };
+
+  useEffect(() => {
+    refreshUserData();
+  }, []);
 
   const [activeChats, setActiveChats] = useState([
     {
@@ -246,6 +251,7 @@ function App() {
                 username={user.username || ''}
                 bio={user.bio || ''}
                 email={user.email || ''}
+                refreshUserData={refreshUserData}
               />
               <div className="overlay"></div>
             </>

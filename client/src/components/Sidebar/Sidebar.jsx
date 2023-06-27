@@ -38,10 +38,7 @@ export default function Sidebar({ closeProfileModal, updateShowProfileModal, upd
     return(
         <div className="sidebar">
             <Profile  updateShowProfileModal={ updateShowProfileModal } 
-                      userId={ user.id } 
-                      username={ user.username } 
-                      bio={ user.bio ? user.bio : ""} 
-                      avatar={ user.avatar ? user.avatar : "" }>
+                      user={user}>
             </Profile>
             <Dropdown title={ 'Friends' } 
                       list={ friends }
