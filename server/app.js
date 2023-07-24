@@ -9,6 +9,9 @@ const http = require('http');
 const server = http.createServer(app);
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+// const sessionStore = require('sessionstore');
+
+const sessionStore = new Map();
 
 // connect to mongoDB server
 mongoose.connect(process.env.MONGODB_URL);
@@ -16,39 +19,6 @@ mongoose.connect(process.env.MONGODB_URL);
 // set up request parsers
 app.use(express.json({ limit: '4mb' }));
 app.use(express.urlencoded({ extended: true }));
-
-// const Users = require('./models/Users');
-// const Chats = require('./models/Chats');
-
-// const user1 = Users({
-//   id: 1,
-//   username: 'pip',
-// });
-
-// user1.save().then(
-//   () => console.log('One entry added'),
-//   (err) => console.log(err)
-// );
-
-// const user2 = Users({
-//   id: 2,
-//   username: 'leeroycool',
-// });
-
-// user2.save().then(
-//   () => console.log('One entry added'),
-//   (err) => console.log(err)
-// );
-
-// const chat1 = Chats({
-//   chatName: 'Cool Chat Between LEEROYCOOL and PIP',
-//   users: [user1._id, user2._id],
-// });
-
-// chat1.save().then(
-//   () => console.log('One entry added'),
-//   (err) => console.log(err)
-// );
 
 // set app ports and policies
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
@@ -94,23 +64,93 @@ app.get('/', (req, res) => {
   }
 });
 
-/** socket.io proof of concept */
-const { Server } = require('socket.io');
-const io = new Server(server, {
+const httpServer = require("http").createServer();
+const io = require("socket.io")(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: "http://localhost:3000",
   },
 });
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('message', (msg) => {
-    console.log('message: ' + msg);
-    io.emit('show message', msg);
-  });
+io.use((socket, next) => {
+  const sessionID = socket.handshake.auth.sessionID;
+  if (sessionID) {
+    // find existing session
+    console.log(sessionStore);
+    console.log('session id ' + sessionID);
+    console.log('yes or no ' + sessionStore.has(sessionID.toString()));
+    const currentSession = sessionStore.has(sessionID.toString()) ? sessionStore.get(sessionID.toString()) : false;
+    console.log('session ' + sessionStore.get(sessionID.toString()));
+    if (currentSession) {
+      console.log(currentSession);
+      socket.sessionID = currentSession.id;
+      socket.userID = currentSession.userID;
+      socket.username = currentSession.username;
+    }
+  }
+  else{
+    const username = socket.handshake.auth.username;
+    if (!username) {
+      return next(new Error("invalid username"));
+    }
+    // create new session
+    socket.sessionID = Date.now();
+    socket.userID = socket.handshake.auth.userID;
+    socket.username = username;
+
+    sessionStore.set((socket.sessionID).toString(), {"id": socket.sessionID, "userID": socket.userID, "username": socket.username});
+  }
+  next();
 });
 
-// set server connection
+io.on("connection", (socket) => {
+
+  socket.join(socket.userID);
+
+  // emit the list of connected users
+  const users = [];
+  for (let [id, socket] of io.of("/").sockets) {
+    users.push({
+      userID: socket.userID,
+      username: socket.username,
+    });
+  }
+  socket.emit("users", users);
+
+  // emit the session and user id to the session
+  socket.emit("session", {
+    sessionID: socket.sessionID,
+    userID: socket.userID,
+  });
+
+  // emit that a new user has connected
+  socket.broadcast.emit("user connected", {
+    userID: socket.userID,
+    username: socket.username,
+  });
+
+  // private messaging
+  socket.on("private message", ({ msg, to }) => {
+    socket.to(to).to(socket.userID).emit("private message", {
+      msg,
+      from: socket.userID,
+      fromUsername: socket.username,
+      to,
+    });
+  });
+
+  socket.on("disconnect", async () => {
+    const matchingSockets = await io.in(socket.userID).allSockets();
+    const isDisconnected = matchingSockets.size === 0;
+    if (isDisconnected) {
+      // notify other users
+      socket.broadcast.emit("user disconnected", socket.userID);
+      // update the connection status of the session
+    }
+    sessionStore.delete((socket.sessionID).toString());
+  });
+
+});
+
 server.listen(port, () => {
   console.log('listening on port:' + port);
 });

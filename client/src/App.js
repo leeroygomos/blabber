@@ -8,14 +8,16 @@ import UpdateProfileModal from './components/UpdateProfileModal/UpdateProfileMod
 import AddFriendModal from './components/AddFriendModal/AddFriendModal';
 
 function App() {
-  // const [isConnected, setIsConnected] = useState(socket.connected);
-  // const [message, setMessage] = useState('');
-  // const [messages, setMessages] = useState([]);
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showAddFriendModal, setAddFriendModal] = useState(false);
+  const [usersSocket, setUsersSocket] = useState([]);
+  const [selectedUser, setSelectedUser] = useState();
 
   const refreshUserData = async () => {
     setLoading(true);
@@ -165,37 +167,104 @@ function App() {
     },
   ]);
 
-  // useEffect(() => {
-  //   function onConnect() {
-  //     setIsConnected(true);
-  //   }
+  useEffect(() => {
+    const sessionID = localStorage.getItem("sessionID");
 
-  //   function onDisconnect() {
-  //     setIsConnected(false);
-  //   }
+    if (sessionID) {
+      socket.auth = { sessionID };
+    }
+    else {
+      socket.auth = {username: user.username, userID: user.id};
+    }
+    socket.connect();
 
-  //   function onShowMessage(msg) {
-  //     setMessages([...messages, msg]);
-  //   }
+    socket.on("session", ({ sessionID, userID }) => {
+      // attach the session ID to the next reconnection attempts
+      socket.auth = { sessionID };
+      // store it in the localStorage
+      localStorage.setItem("sessionID", sessionID);
+      // save the ID of the user
+      socket.userID = userID;
+    });    
 
-  //   socket.on('connect', onConnect);
-  //   socket.on('disconnect', onDisconnect);
-  //   socket.on('show message', (msg) => onShowMessage(msg));
+    socket.on("connect_error", (err) => {
+      if (err.message === "invalid username") {
+        setIsConnected(false);
+      }
+    });
 
-  //   return () => {
-  //     socket.off('connect', onConnect);
-  //     socket.off('disconnect', onDisconnect);
-  //   };
-  // }, [messages]);
+    socket.on("users", (users) => {
+      let tempUsers = [];
+      users.forEach((connectedUser) => {
+        connectedUser.self = connectedUser.userID === socket.userID;
+        tempUsers.push(connectedUser);
+      });
+      // put the current user first, and then sort by username
+      tempUsers = tempUsers.sort((a, b) => {
+        if (a.self) return -1;
+        if (b.self) return 1;
+        if (a.username < b.username) return -1;
+        return a.username > b.username ? 1 : 0;
+      });
+      setUsersSocket(tempUsers);
+    });
 
-  // const sendMessage = () => {
-  //   console.log(message);
-  //   socket.emit('message', message);
-  // };
+    setIsConnected(true);
 
-  // const handleInput = (event) => {
-  //   setMessage(event.target.value);
-  // };
+    return () => {
+      socket.off("connect_error");
+      setIsConnected(false);
+    }
+    
+  },[usersSocket,user.username, user.id]);
+
+  useEffect(() =>{
+    socket.on("user connected", (user) => {
+      console.log("user connected yo");
+      setUsersSocket([...usersSocket, user]);
+    });
+
+  },[usersSocket])
+
+  useEffect(() => {
+    socket.on("private message", ({ msg, from ,fromUsername }) => {
+      console.log("msg: " + msg);
+      console.log("from: " + fromUsername);
+      console.log("from: " + from);
+      for (let i = 0; i < usersSocket.length; i++) {
+        const currUser = usersSocket[i];
+        if (currUser.userID === from) {
+          messages.push({
+            msg: msg,
+            from: from,
+            fromSelf: false,
+          });
+          // if (user !== this.selectedUser) {
+          //   user.hasNewMessages = true;
+          // }
+          break;
+        }
+      }
+    });
+  },[messages])
+
+  const sendMessage = () => {
+    console.log("front end:" + message);
+    if (selectedUser) {
+      socket.emit("private message", {
+        msg: message,
+        to: selectedUser,
+      });
+      messages.push({
+        msg: message,
+        fromSelf: true,
+      });
+    }
+  };
+
+  const handleInput = (event) => {
+    setMessage(event.target.value);
+  };
 
   const toggleShowProfileModal = () => {
     setShowProfileModal(!showProfileModal);
@@ -215,7 +284,15 @@ function App() {
 
   return (
     // <div>
-    //   {isConnected ? <p>Server is connected</p> : <p>Server bad</p>}
+    //   {!isConnected ? <p>Server bad</p> : <>
+    //   <ul>{usersSocket.map((user) => {
+    //     return <>
+    //         <li key={user.userID}>{user.username}</li>
+    //         <input type="button" value="select user" onClick={()=>{setSelectedUser(user.userID)}}/>
+    //         </>
+    //   }
+    //   )}
+    //   </ul>
     //   <div>
     //     <ul>
     //       {messages.map((msg, index) => {
@@ -231,7 +308,8 @@ function App() {
     //       }}
     //     />
     //     <button onClick={() => sendMessage()}>Send</button>
-    //   </div>
+    //   </div></>
+    // }
     // </div>
     <div className="layout">
       {loading ? (
