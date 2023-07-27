@@ -6,6 +6,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import UpdateProfileModal from './components/UpdateProfileModal/UpdateProfileModal';
 import AddFriendModal from './components/AddFriendModal/AddFriendModal';
+import pfp from './assets/pip.jpg';
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -18,6 +19,10 @@ function App() {
   const [showAddFriendModal, setAddFriendModal] = useState(false);
   const [usersSocket, setUsersSocket] = useState([]);
   const [selectedUser, setSelectedUser] = useState();
+  const [currentTab, setCurrentTab] = useState(null);
+  const [activeChats, setActiveChats] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [groups, setGroups] = useState([]);
 
   const refreshUserData = async () => {
     setLoading(true);
@@ -33,167 +38,78 @@ function App() {
       });
   };
 
+  const getFriends = async () => {
+    setLoading(true);
+    fetch('/chats/getFriends', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        setFriends(
+          data.map((friend) => {
+            return {
+              chatId: friend._id,
+              name: friend.username,
+              img: friend.avatar,
+              bio: friend.bio,
+            };
+          })
+        );
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getGroups = async () => {
+    setLoading(true);
+    fetch('/chats/getGroups', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        setGroups(
+          data.map((group) => {
+            group.img = pfp;
+            return { chatId: group._id, name: group.chatName, img: group.img };
+          })
+        );
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     refreshUserData();
+    getFriends();
+    getGroups();
   }, []);
 
-  const [activeChats, setActiveChats] = useState([
-    {
-      user: 'leeroycool',
-      messages: [
-        {
-          username: 'leeroycool',
-          message: 'hi pip',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        { username: 'pip', message: 'wassap', timestamp: '2023-05-09 4:20 PM' },
-      ],
-    },
-    {
-      user: 'stickypasta',
-      messages: [
-        { username: 'pip', message: 'ayo', timestamp: '2023-05-09 4:20 PM' },
-        {
-          username: 'stickypasta',
-          message: 'u r so cute pip!',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'ya i know :))',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-      ],
-    },
-    {
-      user: 'pip',
-      messages: [
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'pip',
-          message: 'hello to myself',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-      ],
-    },
-    {
-      user: 'froggers',
-      messages: [
-        {
-          username: 'pip',
-          message: 'sup dawg',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'froggers',
-          message: 'im soo THICC',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-      ],
-    },
-    {
-      user: 'mario',
-      messages: [
-        {
-          username: 'pip',
-          message: 'who tf is this?',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-        {
-          username: 'mario',
-          message: 'its a me MARIO!',
-          timestamp: '2023-05-09 4:20 PM',
-        },
-      ],
-    },
-  ]);
-
   useEffect(() => {
-    const sessionID = localStorage.getItem("sessionID");
+    const sessionID = localStorage.getItem('sessionID');
 
     if (sessionID) {
       socket.auth = { sessionID };
-    }
-    else {
-      socket.auth = {username: user.username, userID: user.id};
+    } else {
+      socket.auth = { username: user.username, userID: user.id };
     }
     socket.connect();
 
-    socket.on("session", ({ sessionID, userID }) => {
+    socket.on('session', ({ sessionID, userID }) => {
       // attach the session ID to the next reconnection attempts
       socket.auth = { sessionID };
       // store it in the localStorage
-      localStorage.setItem("sessionID", sessionID);
+      localStorage.setItem('sessionID', sessionID);
       // save the ID of the user
       socket.userID = userID;
-    });    
+    });
 
-    socket.on("connect_error", (err) => {
-      if (err.message === "invalid username") {
+    socket.on('connect_error', (err) => {
+      if (err.message === 'invalid username') {
         setIsConnected(false);
       }
     });
 
-    socket.on("users", (users) => {
+    socket.on('users', (users) => {
       let tempUsers = [];
       users.forEach((connectedUser) => {
         connectedUser.self = connectedUser.userID === socket.userID;
@@ -212,25 +128,23 @@ function App() {
     setIsConnected(true);
 
     return () => {
-      socket.off("connect_error");
+      socket.off('connect_error');
       setIsConnected(false);
-    }
-    
-  },[usersSocket,user.username, user.id]);
-
-  useEffect(() =>{
-    socket.on("user connected", (user) => {
-      console.log("user connected yo");
-      setUsersSocket([...usersSocket, user]);
-    });
-
-  },[usersSocket])
+    };
+  }, [usersSocket, user.username, user.id]);
 
   useEffect(() => {
-    socket.on("private message", ({ msg, from ,fromUsername }) => {
-      console.log("msg: " + msg);
-      console.log("from: " + fromUsername);
-      console.log("from: " + from);
+    socket.on('user connected', (user) => {
+      console.log('user connected yo');
+      setUsersSocket([...usersSocket, user]);
+    });
+  }, [usersSocket]);
+
+  useEffect(() => {
+    socket.on('private message', ({ msg, from, fromUsername }) => {
+      console.log('msg: ' + msg);
+      console.log('from: ' + fromUsername);
+      console.log('from: ' + from);
       for (let i = 0; i < usersSocket.length; i++) {
         const currUser = usersSocket[i];
         if (currUser.userID === from) {
@@ -246,12 +160,12 @@ function App() {
         }
       }
     });
-  },[messages])
+  }, [messages]);
 
   const sendMessage = () => {
-    console.log("front end:" + message);
+    console.log('front end:' + message);
     if (selectedUser) {
-      socket.emit("private message", {
+      socket.emit('private message', {
         msg: message,
         to: selectedUser,
       });
@@ -281,6 +195,46 @@ function App() {
   const closeAddFriendModal = () => {
     setAddFriendModal(false);
   };
+
+  const getCurrentChat = async (chatId) => {
+    fetch(`/messages/getMessages/${chatId}`, { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          console.log(data);
+        } else {
+          console.log();
+        }
+      });
+  };
+
+  // {
+  //     user: 'leeroycool',
+  //     messages: [
+  //       {
+  //         username: 'leeroycool',
+  //         message: 'hi pip',
+  //         timestamp: '2023-05-09 4:20 PM',
+  //       },
+  //       { username: 'pip', message: 'wassap', timestamp: '2023-05-09 4:20 PM' },
+  //     ],
+  //   },
+  //   {
+  //     user: 'stickypasta',
+  //     messages: [
+  //       { username: 'pip', message: 'ayo', timestamp: '2023-05-09 4:20 PM' },
+  //       {
+  //         username: 'stickypasta',
+  //         message: 'u r so cute pip!',
+  //         timestamp: '2023-05-09 4:20 PM',
+  //       },
+  //       {
+  //         username: 'pip',
+  //         message: 'ya i know :))',
+  //         timestamp: '2023-05-09 4:20 PM',
+  //       },
+  //     ],
+  //   },
 
   return (
     // <div>
@@ -319,7 +273,11 @@ function App() {
           <Sidebar
             updateShowProfileModal={toggleShowProfileModal}
             updateAddFriendModal={toggleAddFriendModal}
+            setCurrentTab={setCurrentTab}
+            getCurrentChat={getCurrentChat}
             user={user}
+            friends={friends}
+            groups={groups}
           />
           <Chat activeChats={activeChats} />
           {showProfileModal ? (
