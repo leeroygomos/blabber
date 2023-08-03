@@ -3,7 +3,7 @@ import './Dropdown.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretRight, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-export default function Dropdown({ title, list, openModal, setCurrentTab, getCurrentChat }){
+export default function Dropdown({ title, list, openModal, getCurrentChat }){
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -11,9 +11,8 @@ export default function Dropdown({ title, list, openModal, setCurrentTab, getCur
         setIsOpen(!isOpen);
     }
 
-    const openChat = (chatId) => {
-        setCurrentTab(chatId);
-        getCurrentChat(chatId);
+    const openChat = (chatId, chatName) => {
+        getCurrentChat(chatId, chatName);
     }
 
     return(
@@ -32,7 +31,7 @@ export default function Dropdown({ title, list, openModal, setCurrentTab, getCur
             {isOpen ? <div className="dropdown-list">
                 <ul>
                     {list.map((item) => {
-                        return <li key={ item.chatId } onClick = { () => openChat(item.chatId) }>
+                        return <li key={ item.chatId } onClick = { () => openChat(item.chatId, item.name) }>
                                     <img className="list-avatar" src={ item.img } alt="avatar" />
                                     <div className="info">
                                         <div className="username">{ item.name }</div>
