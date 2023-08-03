@@ -162,6 +162,15 @@ function App() {
     });
   }, [messages]);
 
+  useEffect(() => {
+    setCurrentTab(activeChats.length - 1);
+    setMessages(
+      activeChats[activeChats.length - 1]
+        ? activeChats[activeChats.length - 1].messages
+        : []
+    );
+  }, [activeChats]);
+
   const sendMessage = () => {
     console.log('front end:' + message);
     if (selectedUser) {
@@ -196,16 +205,29 @@ function App() {
     setAddFriendModal(false);
   };
 
-  const getCurrentChat = async (chatId) => {
-    fetch(`/messages/getMessages/${chatId}`, { credentials: 'include' })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data) {
-          console.log(data);
-        } else {
-          console.log();
-        }
-      });
+  const getCurrentChat = async (chatId, chatName) => {
+    const chatIndex = activeChats.findIndex((chat) => chat.chatId === chatId);
+    if (chatIndex !== -1) {
+      setCurrentTab(chatIndex);
+      setMessages(activeChats[chatIndex].messages);
+    } else {
+      fetch(`/messages/getMessages/${chatId}`, { credentials: 'include' })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data) {
+            console.log(data);
+            setActiveChats([
+              ...activeChats,
+              { chatId: chatId, messages: data, chatName: chatName },
+            ]);
+          } else {
+          }
+        });
+    }
+  };
+
+  const updateMessages = (index) => {
+    setMessages(activeChats[index].messages);
   };
 
   // {
@@ -273,13 +295,18 @@ function App() {
           <Sidebar
             updateShowProfileModal={toggleShowProfileModal}
             updateAddFriendModal={toggleAddFriendModal}
-            setCurrentTab={setCurrentTab}
             getCurrentChat={getCurrentChat}
             user={user}
             friends={friends}
             groups={groups}
           />
-          <Chat activeChats={activeChats} />
+          <Chat
+            activeChats={activeChats}
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            messages={messages}
+            updateMessages={updateMessages}
+          />
           {showProfileModal ? (
             <>
               <UpdateProfileModal
