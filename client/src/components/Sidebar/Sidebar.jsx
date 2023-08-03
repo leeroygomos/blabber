@@ -2,7 +2,7 @@ import './Sidebar.css';
 import Profile from '../Profile/Profile';
 import Dropdown from '../Dropdown/Dropdown';
 
-export default function Sidebar({ closeProfileModal, updateShowProfileModal, updateAddFriendModal, setCurrentTab, getCurrentChat, user, friends, groups }){
+export default function Sidebar({ closeProfileModal, updateShowProfileModal, updateAddFriendModal, getCurrentChat, user, friends, groups }){
 
     // const [friends, setFriends] = useState([]);
     // const [groups, setGroups] = useState([]);
@@ -41,7 +41,6 @@ export default function Sidebar({ closeProfileModal, updateShowProfileModal, upd
             <Dropdown title={ 'Friends' } 
                       list={ friends }
                       openModal = { updateAddFriendModal }
-                      setCurrentTab = { setCurrentTab }
                       getCurrentChat={ getCurrentChat }></Dropdown>
             <Dropdown title={ 'Groups' } list={ groups }></Dropdown>
         </div>
