@@ -12,6 +12,7 @@ const MessagesSchema = new Schema(
       maxLength: 4096,
     },
     senderId: String,
+    senderName: String,
     message: String,
   },
   { timestamps: true }
