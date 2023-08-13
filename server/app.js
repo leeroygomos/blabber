@@ -72,27 +72,27 @@ const io = require("socket.io")(server, {
 });
 
 io.use((socket, next) => {
-  const sessionID = socket.handshake.auth.sessionID;
+  let sessionID = socket.handshake.auth.sessionID;
   if (sessionID) {
     // find existing session
-    console.log(sessionStore);
-    console.log('session id ' + sessionID);
-    console.log('yes or no ' + sessionStore.has(sessionID.toString()));
     const currentSession = sessionStore.has(sessionID.toString()) ? sessionStore.get(sessionID.toString()) : false;
-    console.log('session ' + sessionStore.get(sessionID.toString()));
     if (currentSession) {
-      console.log(currentSession);
       socket.sessionID = currentSession.id;
       socket.userID = currentSession.userID;
       socket.username = currentSession.username;
     }
+    else{
+      sessionID = null;
+    }
   }
-  else{
+
+  if (!sessionID){
     const username = socket.handshake.auth.username;
     if (!username) {
       return next(new Error("invalid username"));
     }
     // create new session
+    // TODO: change the session ID to not be the date
     socket.sessionID = Date.now();
     socket.userID = socket.handshake.auth.userID;
     socket.username = username;

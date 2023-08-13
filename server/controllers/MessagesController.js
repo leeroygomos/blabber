@@ -17,6 +17,7 @@ module.exports = {
     // create a new message
     const newMessage = Messages({
       chatId: req.params.chatId,
+      senderName: req.session.username,
       senderId: req.session.userid,
       message: req.body.message,
     });
