@@ -2,18 +2,18 @@ import React from "react";
 import './Messages.css';
 import Input from '../Input/Input';
 
-export default function Messages({messages}){
+export default function Messages({messages, sendMessage}){
     return(
         <div className='messages-container'>
             <div className='messages'>
                 {messages.length > 0 
-                    ? messages.map((message) => {
+                    ? messages.toReversed().map((message) => {
                             return <MessageItem username={message.senderName} message={message.message} timestamp={message.createdAt}/>
                         }) 
                     : <p className="placeholder">No messages</p>
                 }
             </div>
-            <Input/>
+            <Input sendMessage={sendMessage}/>
         </div>
     );
 }

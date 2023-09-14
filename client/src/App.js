@@ -10,7 +10,6 @@ import pfp from './assets/pip.jpg';
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
@@ -18,7 +17,7 @@ function App() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showAddFriendModal, setAddFriendModal] = useState(false);
   const [usersSocket, setUsersSocket] = useState([]);
-  const [selectedUser, setSelectedUser] = useState();
+  const [selectedChat, setSelectedChat] = useState(null);
   const [currentTab, setCurrentTab] = useState(null);
   const [activeChats, setActiveChats] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -46,6 +45,7 @@ function App() {
         setFriends(
           data.map((friend) => {
             return {
+              userId: friend.userId,
               chatId: friend._id,
               name: friend.username,
               img: friend.avatar,
@@ -85,82 +85,78 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const sessionID = localStorage.getItem('sessionID');
+    if (!loading){
+      const sessionID = localStorage.getItem('sessionID');
 
-    if (sessionID) {
-      socket.auth = { sessionID };
-    } else {
-      socket.auth = { username: user.username, userID: user.id };
-    }
-    socket.connect();
-
-    socket.on('session', ({ sessionID, userID }) => {
-      // attach the session ID to the next reconnection attempts
-      socket.auth = { sessionID };
-      // store it in the localStorage
-      localStorage.setItem('sessionID', sessionID);
-      // save the ID of the user
-      socket.userID = userID;
-    });
-
-    socket.on('connect_error', (err) => {
-      if (err.message === 'invalid username') {
-        setIsConnected(false);
+      if (sessionID) {
+        socket.auth = { sessionID };
+      } else {
+        socket.auth = { username: user.username, userID: user.id };
       }
-    });
+      socket.connect();
 
-    socket.on('users', (users) => {
-      let tempUsers = [];
-      users.forEach((connectedUser) => {
-        connectedUser.self = connectedUser.userID === socket.userID;
-        tempUsers.push(connectedUser);
+      socket.on('session', ({ sessionID, userID }) => {
+        // attach the session ID to the next reconnection attempts
+        socket.auth = { sessionID };
+        // store it in the localStorage
+        localStorage.setItem('sessionID', sessionID);
+        // save the ID of the user
+        socket.userID = userID;
       });
-      // put the current user first, and then sort by username
-      tempUsers = tempUsers.sort((a, b) => {
-        if (a.self) return -1;
-        if (b.self) return 1;
-        if (a.username < b.username) return -1;
-        return a.username > b.username ? 1 : 0;
+
+      socket.on('connect_error', (err) => {
+        if (err.message === 'invalid username') {
+          setIsConnected(false);
+        }
       });
-      setUsersSocket(tempUsers);
-    });
 
-    setIsConnected(true);
+      setLoading(false);
+    }
+      return () => {
+        socket.off('connect_error');
+        setLoading(true);
+      };
+  }, [user.username, user.id, loading]);
 
-    return () => {
-      socket.off('connect_error');
-      setIsConnected(false);
-    };
-  }, [usersSocket, user.username, user.id]);
 
+  // remove?
   useEffect(() => {
     socket.on('user connected', (user) => {
-      console.log('user connected yo');
       setUsersSocket([...usersSocket, user]);
     });
   }, [usersSocket]);
 
   useEffect(() => {
-    socket.on('private message', ({ msg, from, fromUsername }) => {
-      console.log('msg: ' + msg);
-      console.log('from: ' + fromUsername);
-      console.log('from: ' + from);
-      for (let i = 0; i < usersSocket.length; i++) {
-        const currUser = usersSocket[i];
-        if (currUser.userID === from) {
-          messages.push({
-            msg: msg,
-            from: from,
-            fromSelf: false,
-          });
-          // if (user !== this.selectedUser) {
-          //   user.hasNewMessages = true;
-          // }
-          break;
+
+    const handlePrivateMessage = ({chatId, senderName, message, createdAt}) => {
+      let msg = {
+        chatId: chatId,
+        senderName: senderName,
+        message: message,
+        createdAt: createdAt,
+      };
+      let temp = activeChats;
+      // let chatIndex = getChatTab(chatId);
+      let chatIndex = activeChats.findIndex((chat) => chat.chatId === chatId)
+      if (chatIndex !== -1){
+        temp[chatIndex].messages.push(msg);
+        if (chatIndex === currentTab){
+          // setMessages(activeChats[chatIndex].messages);
+          setMessages([...messages, msg]);
         }
+        setActiveChats(temp);
       }
-    });
-  }, [messages]);
+      else {
+        // TODO: handle if there is no active chat
+      }
+    }
+
+    socket.on('private message', handlePrivateMessage);
+
+    return () => {
+      socket.off('private message', handlePrivateMessage);
+    }
+  }, [activeChats, currentTab, messages]);
 
   useEffect(() => {
     setCurrentTab(activeChats.length - 1);
@@ -171,23 +167,44 @@ function App() {
     );
   }, [activeChats]);
 
-  const sendMessage = () => {
-    console.log('front end:' + message);
-    if (selectedUser) {
-      socket.emit('private message', {
-        msg: message,
-        to: selectedUser,
-      });
-      messages.push({
-        msg: message,
-        fromSelf: true,
-      });
+  const sendMessage = (message) => {
+    if (selectedChat) {
+      const timestamp = Date.now()
+
+      let msg = {
+        chatId: selectedChat,
+        senderName: user.username,
+        message: message,
+        createdAt: timestamp,
+      }
+
+      socket.emit('private message', {...msg, to: selectedChat});
+      setMessages([...messages, msg]);
+      let temp = activeChats;
+      temp[currentTab].messages.push(msg);
+      setActiveChats(temp);
+      // TODO: save to DB
+      saveMessage(msg);
     }
   };
 
-  const handleInput = (event) => {
-    setMessage(event.target.value);
-  };
+  const saveMessage = (msg) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(msg),
+        credentials: 'include'
+    };
+    fetch(`/messages/sendMessage/${selectedChat}`, requestOptions)
+      .then((res) => res.status)
+      .then((status) => {
+        if (status === 200) {
+        } 
+        else {
+          console.log(status);
+        }
+      });
+  }
 
   const toggleShowProfileModal = () => {
     setShowProfileModal(!showProfileModal);
@@ -205,22 +222,22 @@ function App() {
     setAddFriendModal(false);
   };
 
-  const getCurrentChat = async (chatId, chatName) => {
+  const getCurrentChat = async (chatId, chatName, userId) => {
     const chatIndex = activeChats.findIndex((chat) => chat.chatId === chatId);
     if (chatIndex !== -1) {
       setCurrentTab(chatIndex);
       setMessages(activeChats[chatIndex].messages);
+      setSelectedChat(activeChats[chatIndex].chatId);
     } else {
       fetch(`/messages/getMessages/${chatId}`, { credentials: 'include' })
         .then((res) => res.json())
         .then((data) => {
           if (data) {
-            console.log(data);
             setActiveChats([
               ...activeChats,
-              { chatId: chatId, messages: data, chatName: chatName },
+              { chatId: chatId, messages: data, chatName: chatName, userId: userId },
             ]);
-          } else {
+            setSelectedChat(chatId);
           }
         });
     }
@@ -230,63 +247,7 @@ function App() {
     setMessages(activeChats[index].messages);
   };
 
-  // {
-  //     user: 'leeroycool',
-  //     messages: [
-  //       {
-  //         username: 'leeroycool',
-  //         message: 'hi pip',
-  //         timestamp: '2023-05-09 4:20 PM',
-  //       },
-  //       { username: 'pip', message: 'wassap', timestamp: '2023-05-09 4:20 PM' },
-  //     ],
-  //   },
-  //   {
-  //     user: 'stickypasta',
-  //     messages: [
-  //       { username: 'pip', message: 'ayo', timestamp: '2023-05-09 4:20 PM' },
-  //       {
-  //         username: 'stickypasta',
-  //         message: 'u r so cute pip!',
-  //         timestamp: '2023-05-09 4:20 PM',
-  //       },
-  //       {
-  //         username: 'pip',
-  //         message: 'ya i know :))',
-  //         timestamp: '2023-05-09 4:20 PM',
-  //       },
-  //     ],
-  //   },
-
   return (
-    // <div>
-    //   {!isConnected ? <p>Server bad</p> : <>
-    //   <ul>{usersSocket.map((user) => {
-    //     return <>
-    //         <li key={user.userID}>{user.username}</li>
-    //         <input type="button" value="select user" onClick={()=>{setSelectedUser(user.userID)}}/>
-    //         </>
-    //   }
-    //   )}
-    //   </ul>
-    //   <div>
-    //     <ul>
-    //       {messages.map((msg, index) => {
-    //         return <li key={index}>{msg}</li>;
-    //       })}
-    //     </ul>
-    //   </div>
-    //   <div>
-    //     <input
-    //       type="text"
-    //       onChange={(event) => {
-    //         handleInput(event);
-    //       }}
-    //     />
-    //     <button onClick={() => sendMessage()}>Send</button>
-    //   </div></>
-    // }
-    // </div>
     <div className="layout">
       {loading ? (
         <h1>Loading...</h1> //TODO: Add a real loading screen
@@ -306,6 +267,7 @@ function App() {
             setCurrentTab={setCurrentTab}
             messages={messages}
             updateMessages={updateMessages}
+            sendMessage={sendMessage}
           />
           {showProfileModal ? (
             <>

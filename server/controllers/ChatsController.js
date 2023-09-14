@@ -25,19 +25,18 @@ module.exports = {
     let recipients = await usersService.getUsersByIds(recipientIds);
 
     // add recipient username to data
-    let modifiedDirectMessages = directMessages.map((message) => {
-      let messageObj = message.toObject();
-      messageObj.username = recipients.find((recipient) =>
-        message.users.includes(recipient._id)
-      ).username;
-      messageObj.bio = recipients.find((recipient) =>
-        message.users.includes(recipient._id)
-      ).bio;
-      messageObj.avatar = recipients.find((recipient) =>
-        message.users.includes(recipient._id)
-      ).avatar;
-      return messageObj;
-    });
+    let modifiedDirectMessages = [];
+    for (const recipient of recipients){
+      let dm = directMessages.find((msg) => msg.users.includes(recipient._id)).toObject();
+      let messageObj = {
+        ...dm,
+        "userId": recipient._id,
+        "username": recipient.username,
+        "bio": recipient.bio,
+        "avatar": recipient.avatar,
+      };
+      modifiedDirectMessages.push(messageObj);
+    }
 
     // return query
     modifiedDirectMessages ? res.json(modifiedDirectMessages) : res.json([]);

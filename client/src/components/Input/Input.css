@@ -25,10 +25,14 @@ input::placeholder {
 }
 
 .send-btn {
-    width: 10%;
+    width: 90%;
     border: none;
     background-color: none;
     padding: 0;
+}
+
+.send-btn:hover {
+    scale: 1.15;
 }
 
 .input-left {

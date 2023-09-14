@@ -2,7 +2,7 @@ import React from "react";
 import './Chat.css'
 import Tabs from '../Tabs/Tabs';
 
-export default function Chat({activeChats, currentTab, setCurrentTab, messages, updateMessages }){
+export default function Chat({activeChats, currentTab, setCurrentTab, messages, updateMessages, sendMessage }){
     return(
         <div className="chat">
             {
@@ -12,7 +12,8 @@ export default function Chat({activeChats, currentTab, setCurrentTab, messages, 
                       currentTab={currentTab} 
                       setCurrentTab={setCurrentTab}
                       messages={messages}
-                      updateMessages={updateMessages}/>
+                      updateMessages={updateMessages}
+                      sendMessage={sendMessage}/>
                 : 
                 <div className='placeholder'>
                     <p>You have no friends</p>

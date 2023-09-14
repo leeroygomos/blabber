@@ -103,8 +103,9 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-
   socket.join(socket.userID);
+  //TODO: join all chat sockets
+  socket.join("648e75b3037b832bcdf7b74e");
 
   // emit the list of connected users
   const users = [];
@@ -129,12 +130,12 @@ io.on("connection", (socket) => {
   });
 
   // private messaging
-  socket.on("private message", ({ msg, to }) => {
-    socket.to(to).to(socket.userID).emit("private message", {
-      msg,
-      from: socket.userID,
-      fromUsername: socket.username,
-      to,
+  socket.on("private message", ({ chatId, senderName, message, createdAt, to }) => {
+    socket.to(to).emit("private message", {
+      chatId,
+      senderName,
+      message,
+      createdAt,
     });
   });
 

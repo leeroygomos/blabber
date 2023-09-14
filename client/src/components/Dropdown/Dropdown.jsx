@@ -11,8 +11,8 @@ export default function Dropdown({ title, list, openModal, getCurrentChat }){
         setIsOpen(!isOpen);
     }
 
-    const openChat = (chatId, chatName) => {
-        getCurrentChat(chatId, chatName);
+    const openChat = (chatId, chatName, userId) => {
+        getCurrentChat(chatId, chatName, userId);
     }
 
     return(
@@ -31,7 +31,7 @@ export default function Dropdown({ title, list, openModal, getCurrentChat }){
             {isOpen ? <div className="dropdown-list">
                 <ul>
                     {list.map((item) => {
-                        return <li key={ item.chatId } onClick = { () => openChat(item.chatId, item.name) }>
+                        return <li key={ item.chatId } onClick = { () => openChat(item.chatId, item.name, item.userId) }>
                                     <img className="list-avatar" src={ item.img } alt="avatar" />
                                     <div className="info">
                                         <div className="username">{ item.name }</div>
