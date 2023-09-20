@@ -5,7 +5,7 @@ import { faCaretDown, faCaretRight, faPlus } from '@fortawesome/free-solid-svg-i
 
 export default function Dropdown({ title, list, openModal, getCurrentChat }){
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const toggleOpen = () => {
         setIsOpen(!isOpen);

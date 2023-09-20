@@ -257,6 +257,12 @@ function App() {
     setMessages(activeChats[index].messages);
   };
 
+  const closeTab = (index) => {
+    let newActiveChats = [...activeChats];
+    newActiveChats.splice(index,1);
+    setActiveChats(newActiveChats);
+  };
+
   return (
     <div className="layout">
       {loading ? (
@@ -279,6 +285,7 @@ function App() {
             messages={messages}
             updateMessages={updateMessages}
             sendMessage={sendMessage}
+            closeTab={closeTab}
           />
           {showProfileModal ? (
             <>

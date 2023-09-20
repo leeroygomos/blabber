@@ -11,7 +11,7 @@
     flex-direction: row;
     width: 100%;
     height: 5%;
-    overflow: hidden;
+    overflow-x: auto;
 }
 
 .tab-header {
@@ -20,18 +20,27 @@
     font-size: 1em;
     font-weight: 600;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin-top:0.3%;
     margin-right:0.2%;
     border-radius: 40% 40% 0 0;
     box-sizing: border-box;
-    padding: 1em 5em 1em 5em;
+    padding: 1.2em 0em 1em 1.5em;
     color: #333333;
+}
+
+.tab-header button{
+    border: none;
+    background-color: rgba(255, 0, 0, 0);
+    color: black;
+    padding: 0.4rem 0.8rem;
+    font-size: large;
+    margin: 0;
 }
 
 .tab-header:hover{
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 1.05em;
 }
 
 .tab-body {
