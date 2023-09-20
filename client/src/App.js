@@ -6,6 +6,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
 import UpdateProfileModal from './components/UpdateProfileModal/UpdateProfileModal';
 import AddFriendModal from './components/AddFriendModal/AddFriendModal';
+import CreateGroupModal from './components/CreateGroupModal/CreateGroupModal';
 import pfp from './assets/pip.jpg';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const navigate = useNavigate();
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showAddFriendModal, setAddFriendModal] = useState(false);
+  const [createGroupModal, setCreateGroupModal] = useState(false);
   const [usersSocket, setUsersSocket] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [currentTab, setCurrentTab] = useState(null);
@@ -214,12 +216,20 @@ function App() {
     setAddFriendModal(!showAddFriendModal);
   };
 
+  const toggleCreateGroupModal = () => {
+    setCreateGroupModal(!createGroupModal);
+  };
+
   const closeProfileModal = () => {
     setShowProfileModal(false);
   };
 
   const closeAddFriendModal = () => {
     setAddFriendModal(false);
+  };
+
+  const closeCreateGroupModal = () => {
+    setCreateGroupModal(false);
   };
 
   const getCurrentChat = async (chatId, chatName, userId) => {
@@ -256,6 +266,7 @@ function App() {
           <Sidebar
             updateShowProfileModal={toggleShowProfileModal}
             updateAddFriendModal={toggleAddFriendModal}
+            updateCreateGroupModal={toggleCreateGroupModal}
             getCurrentChat={getCurrentChat}
             user={user}
             friends={friends}
@@ -288,9 +299,12 @@ function App() {
               <AddFriendModal closeAddFriendModal={closeAddFriendModal} />
               <div className="overlay"></div>
             </>
-          ) : (
-            <></>
-          )}
+          ) : createGroupModal ? (
+            <>
+              <CreateGroupModal closeCreateGroupModal={closeCreateGroupModal} />
+              <div className="overlay"></div>
+            </>
+          ) : <></>}
         </>
       )}
     </div>
